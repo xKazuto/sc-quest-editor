@@ -22,15 +22,12 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
     if (quest[name as keyof Quest] === finalValue) {
       return;
     }
-    
-    // For Quest ID, maintain the current quest selection
-    if (name === 'Id') {
-      // Keep the current quest selected by preserving its ID
-      if (!value.trim()) {
-        return;
-      }
+
+    // For Quest ID, only update if it's not empty
+    if (name === 'Id' && !value.trim()) {
+      return;
     }
-    
+
     onChange({ [name]: finalValue });
   };
 
