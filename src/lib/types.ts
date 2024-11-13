@@ -1,5 +1,5 @@
 export interface Quest {
-  Id: number;
+  Id: string;
   TakerId: string;
   Type: number;
   Name: string;
