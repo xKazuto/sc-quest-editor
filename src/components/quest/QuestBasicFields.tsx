@@ -3,6 +3,8 @@ import { Quest } from '@/lib/types';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { Label } from "@/components/ui/label";
+import { FormItem } from "@/components/ui/form";
 
 interface QuestBasicFieldsProps {
   quest: Quest;
@@ -12,8 +14,10 @@ interface QuestBasicFieldsProps {
 export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onChange }) => {
   const { toast } = useToast();
   
-  const handleInputChange = (field: keyof Quest, value: string | number) => {
-    onChange({ [field]: value });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = e.target;
+    const finalValue = type === 'number' ? Number(value) : value;
+    onChange({ [name]: finalValue });
   };
 
   const generateQuestId = () => {
@@ -28,60 +32,56 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
   };
 
   return (
-    <div className="space-y-4">
-      <div>
-        <label className="text-sm font-medium">Quest ID</label>
-        <div className="flex gap-2 mt-1">
-          <div className="flex-1 relative">
-            <Input
-              value={quest.Id}
-              onChange={(e) => handleInputChange('Id', e.target.value)}
-              className="w-full pr-24"
-              placeholder="Enter Quest ID"
-            />
-            <Button 
-              variant="outline"
-              onClick={generateQuestId}
-              className="absolute right-0 top-0 h-full rounded-l-none"
-              type="button"
-            >
-              Generate
-            </Button>
-          </div>
+    <div className="space-y-6">
+      <FormItem>
+        <Label>Quest ID</Label>
+        <div className="flex gap-2">
+          <Input
+            name="Id"
+            value={quest.Id}
+            onChange={handleInputChange}
+            placeholder="Enter Quest ID"
+          />
+          <Button 
+            variant="outline"
+            onClick={generateQuestId}
+            type="button"
+          >
+            Generate
+          </Button>
         </div>
-      </div>
+      </FormItem>
 
-      <div>
-        <label className="text-sm font-medium">Quest Type</label>
+      <FormItem>
+        <Label>Quest Type</Label>
         <Input
+          name="Type"
           type="number"
-          value={quest.Type ?? 0}
-          onChange={(e) => handleInputChange('Type', Number(e.target.value))}
-          className="mt-1"
+          value={quest.Type}
+          onChange={handleInputChange}
           placeholder="Enter Quest Type"
         />
-      </div>
+      </FormItem>
 
-      <div>
-        <label className="text-sm font-medium">Taker ID</label>
+      <FormItem>
+        <Label>Taker ID</Label>
         <Input
-          value={quest.TakerId ?? ''}
-          onChange={(e) => handleInputChange('TakerId', e.target.value)}
-          className="mt-1"
+          name="TakerId"
+          value={quest.TakerId}
+          onChange={handleInputChange}
           placeholder="Enter Taker ID"
         />
-      </div>
+      </FormItem>
 
-      <div>
-        <label className="text-sm font-medium">Name</label>
+      <FormItem>
+        <Label>Name</Label>
         <Input
-          type="text"
-          value={quest.Name ?? ''}
-          onChange={(e) => handleInputChange('Name', e.target.value)}
-          className="mt-1"
+          name="Name"
+          value={quest.Name}
+          onChange={handleInputChange}
           placeholder="Enter Quest Name"
         />
-      </div>
+      </FormItem>
     </div>
   );
 };

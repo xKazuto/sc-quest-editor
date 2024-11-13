@@ -1,10 +1,12 @@
 import React from 'react';
 import { Quest } from '@/lib/types';
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { QuestBasicFields } from './QuestBasicFields';
 import { QuestPrerequisites } from './QuestPrerequisites';
 import { QuestSoundSettings } from './QuestSoundSettings';
+import { FormItem } from "@/components/ui/form";
 
 interface QuestBasicInfoProps {
   quest: Quest;
@@ -12,127 +14,119 @@ interface QuestBasicInfoProps {
 }
 
 export const QuestBasicInfo: React.FC<QuestBasicInfoProps> = ({ quest, onChange }) => {
+  const handleCheckboxChange = (field: keyof Quest) => {
+    onChange({ [field]: !quest[field] });
+  };
+
   return (
     <div className="space-y-6">
       <QuestBasicFields quest={quest} onChange={onChange} />
       <QuestPrerequisites quest={quest} onChange={onChange} />
 
-      <div className="flex items-center space-x-2">
+      <FormItem className="flex items-center space-x-2">
         <Checkbox
           id="eventSendToClient"
           checked={quest.EventSendToClient}
-          onCheckedChange={(checked) => 
-            onChange({ EventSendToClient: checked as boolean })
-          }
+          onCheckedChange={() => handleCheckboxChange('EventSendToClient')}
         />
-        <label htmlFor="eventSendToClient" className="text-sm font-medium">
+        <Label htmlFor="eventSendToClient">
           Event Send To Client
-        </label>
-      </div>
+        </Label>
+      </FormItem>
 
       {quest.EventSendToClient && (
-        <div>
-          <label className="text-sm font-medium">Event ID</label>
+        <FormItem>
+          <Label>Event ID</Label>
           <Input
             value={quest.EventId}
             onChange={(e) => onChange({ EventId: e.target.value })}
-            className="mt-1"
+            placeholder="Enter Event ID"
           />
-        </div>
+        </FormItem>
       )}
 
       <QuestSoundSettings quest={quest} onChange={onChange} />
 
       <div className="space-y-4">
-        <div className="flex items-center space-x-2">
+        <FormItem className="flex items-center space-x-2">
           <Checkbox
             id="isRepeatable"
             checked={quest.IsRepeatable}
-            onCheckedChange={(checked) => 
-              onChange({ IsRepeatable: checked as boolean })
-            }
+            onCheckedChange={() => handleCheckboxChange('IsRepeatable')}
           />
-          <label htmlFor="isRepeatable" className="text-sm font-medium">
+          <Label htmlFor="isRepeatable">
             Is Repeatable
-          </label>
-        </div>
+          </Label>
+        </FormItem>
 
         {quest.IsRepeatable && (
           <>
-            <div>
-              <label className="text-sm font-medium">Repeat Duration (Hours)</label>
+            <FormItem>
+              <Label>Repeat Duration (Hours)</Label>
               <Input
                 type="number"
                 value={quest.RepeatDurationHours}
                 onChange={(e) => onChange({ RepeatDurationHours: Number(e.target.value) })}
-                className="mt-1"
+                placeholder="Enter hours"
               />
-            </div>
+            </FormItem>
 
-            <div>
-              <label className="text-sm font-medium">Repeat Duration (Minutes)</label>
+            <FormItem>
+              <Label>Repeat Duration (Minutes)</Label>
               <Input
                 type="number"
                 value={quest.RepeatDurationMinutes}
                 onChange={(e) => onChange({ RepeatDurationMinutes: Number(e.target.value) })}
-                className="mt-1"
+                placeholder="Enter minutes"
               />
-            </div>
+            </FormItem>
           </>
         )}
 
         <div className="space-y-2">
-          <div className="flex items-center space-x-2">
+          <FormItem className="flex items-center space-x-2">
             <Checkbox
               id="resetKillsComplete"
               checked={quest.ResetKillsComplete}
-              onCheckedChange={(checked) => 
-                onChange({ ResetKillsComplete: checked as boolean })
-              }
+              onCheckedChange={() => handleCheckboxChange('ResetKillsComplete')}
             />
-            <label htmlFor="resetKillsComplete" className="text-sm font-medium">
+            <Label htmlFor="resetKillsComplete">
               Reset Kills Complete
-            </label>
-          </div>
+            </Label>
+          </FormItem>
 
-          <div className="flex items-center space-x-2">
+          <FormItem className="flex items-center space-x-2">
             <Checkbox
               id="showGoalItems"
               checked={quest.ShowGoalItems}
-              onCheckedChange={(checked) => 
-                onChange({ ShowGoalItems: checked as boolean })
-              }
+              onCheckedChange={() => handleCheckboxChange('ShowGoalItems')}
             />
-            <label htmlFor="showGoalItems" className="text-sm font-medium">
+            <Label htmlFor="showGoalItems">
               Show Goal Items
-            </label>
-          </div>
+            </Label>
+          </FormItem>
 
-          <div className="flex items-center space-x-2">
+          <FormItem className="flex items-center space-x-2">
             <Checkbox
               id="showRewardItems"
               checked={quest.ShowRewardItems}
-              onCheckedChange={(checked) => 
-                onChange({ ShowRewardItems: checked as boolean })
-              }
+              onCheckedChange={() => handleCheckboxChange('ShowRewardItems')}
             />
-            <label htmlFor="showRewardItems" className="text-sm font-medium">
+            <Label htmlFor="showRewardItems">
               Show Reward Items
-            </label>
-          </div>
+            </Label>
+          </FormItem>
 
-          <div className="flex items-center space-x-2">
+          <FormItem className="flex items-center space-x-2">
             <Checkbox
               id="abandonable"
               checked={quest.Abandonable}
-              onCheckedChange={(checked) => 
-                onChange({ Abandonable: checked as boolean })
-              }
+              onCheckedChange={() => handleCheckboxChange('Abandonable')}
             />
-            <label htmlFor="abandonable" className="text-sm font-medium">
+            <Label htmlFor="abandonable">
               Abandonable
-            </label>
-          </div>
+            </Label>
+          </FormItem>
         </div>
       </div>
     </div>
