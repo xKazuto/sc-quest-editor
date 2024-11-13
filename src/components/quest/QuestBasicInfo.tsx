@@ -21,20 +21,20 @@ export const QuestBasicInfo: React.FC<QuestBasicInfoProps> = ({ quest, onChange 
       </div>
 
       <div>
-        <label className="text-sm font-medium">Taker ID</label>
-        <Input
-          value={quest.TakerId}
-          onChange={(e) => onChange({ TakerId: e.target.value })}
-          className="mt-1"
-        />
-      </div>
-
-      <div>
         <label className="text-sm font-medium">Quest Type</label>
         <Input
           type="number"
           value={quest.Type}
           onChange={(e) => onChange({ Type: Number(e.target.value) })}
+          className="mt-1"
+        />
+      </div>
+
+      <div>
+        <label className="text-sm font-medium">Taker ID</label>
+        <Input
+          value={quest.TakerId}
+          onChange={(e) => onChange({ TakerId: e.target.value })}
           className="mt-1"
         />
       </div>
@@ -96,6 +96,19 @@ export const QuestBasicInfo: React.FC<QuestBasicInfoProps> = ({ quest, onChange 
       </div>
 
       <div className="space-y-2">
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="isRepeatable"
+            checked={quest.IsRepeatable}
+            onCheckedChange={(checked) => 
+              onChange({ IsRepeatable: checked as boolean })
+            }
+          />
+          <label htmlFor="isRepeatable" className="text-sm font-medium">
+            Is Repeatable
+          </label>
+        </div>
+
         <div className="flex items-center space-x-2">
           <Checkbox
             id="eventSendToClient"
