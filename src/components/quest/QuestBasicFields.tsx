@@ -16,7 +16,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
-    const finalValue = type === 'number' ? Number(value) : value;
+    const finalValue = type === 'number' ? (value === '' ? 0 : Number(value)) : value;
     onChange({ [name]: finalValue });
   };
 
@@ -57,7 +57,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <Input
           name="Type"
           type="number"
-          value={quest.Type || 0}
+          value={quest.Type ?? 0}
           onChange={handleInputChange}
           placeholder="Enter Quest Type"
         />
@@ -67,7 +67,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <Label>Taker ID</Label>
         <Input
           name="TakerId"
-          value={quest.TakerId || ''}
+          value={quest.TakerId ?? ''}
           onChange={handleInputChange}
           placeholder="Enter Taker ID"
         />
@@ -77,7 +77,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <Label>Name</Label>
         <Input
           name="Name"
-          value={quest.Name || ''}
+          value={quest.Name ?? ''}
           onChange={handleInputChange}
           placeholder="Enter Quest Name"
         />
