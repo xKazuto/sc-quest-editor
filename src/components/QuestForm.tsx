@@ -1,12 +1,13 @@
 import React from 'react';
 import { Quest, Goal, Reward } from '@/lib/types';
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { createEmptyGoal, createEmptyReward } from '@/lib/questValidation';
 import { QuestBasicInfo } from './quest/QuestBasicInfo';
 import { QuestGoalItem } from './quest/QuestGoalItem';
 import { QuestRewardItem } from './quest/QuestRewardItem';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 interface QuestFormProps {
   quest: Quest;
@@ -59,29 +60,33 @@ export const QuestForm: React.FC<QuestFormProps> = ({ quest, onChange }) => {
         />
       </div>
 
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          id="repeatable"
-          checked={quest.IsRepeatable}
-          onCheckedChange={(checked) => 
-            updateQuest({ IsRepeatable: checked as boolean })
-          }
-        />
-        <label htmlFor="repeatable" className="text-sm font-medium">
-          Is Repeatable
-        </label>
-      </div>
-
       <div>
         <h3 className="text-lg font-semibold mb-4">Goals</h3>
         {quest.Goals.map((goal, index) => (
-          <QuestGoalItem
-            key={index}
-            goal={goal}
-            index={index}
-            onChange={(updates) => updateGoal(index, updates)}
-            onRemove={() => removeGoal(index)}
-          />
+          <Collapsible key={index} className="mb-4">
+            <div className="flex items-center gap-2 mb-2">
+              <CollapsibleTrigger className="flex items-center gap-2">
+                <ChevronRight className="h-4 w-4" />
+                <span>Goal {index + 1}</span>
+              </CollapsibleTrigger>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => removeGoal(index)}
+                className="ml-auto"
+              >
+                Remove
+              </Button>
+            </div>
+            <CollapsibleContent>
+              <QuestGoalItem
+                goal={goal}
+                index={index}
+                onChange={(updates) => updateGoal(index, updates)}
+                onRemove={() => removeGoal(index)}
+              />
+            </CollapsibleContent>
+          </Collapsible>
         ))}
         <Button onClick={addGoal} className="w-full mt-2">
           Add Goal
