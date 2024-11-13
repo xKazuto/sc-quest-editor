@@ -44,6 +44,8 @@ const QuestGiverEditor: React.FC<QuestGiverEditorProps> = ({ questGivers, onUpda
   };
 
   const handleAddQuestToGiver = (giverId: string, questId: string) => {
+    if (!questId) return; // Don't add empty quest IDs
+    
     const updatedQuestGivers = questGivers.map(giver => {
       if (giver.Id === giverId && !giver.Quests.includes(questId)) {
         return {
@@ -78,6 +80,8 @@ const QuestGiverEditor: React.FC<QuestGiverEditorProps> = ({ questGivers, onUpda
     });
   };
 
+  const filteredQuestIds = availableQuestIds.filter(id => id.trim() !== '');
+
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
@@ -106,20 +110,24 @@ const QuestGiverEditor: React.FC<QuestGiverEditorProps> = ({ questGivers, onUpda
             <div className="space-y-4">
               <div>
                 <h4 className="text-sm font-medium mb-2">Add Available Quest</h4>
-                <Select
-                  onValueChange={(value) => handleAddQuestToGiver(giver.Id, value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a quest" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availableQuestIds.map((questId) => (
-                      <SelectItem key={questId} value={questId}>
-                        {questId}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {filteredQuestIds.length > 0 ? (
+                  <Select
+                    onValueChange={(value) => handleAddQuestToGiver(giver.Id, value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a quest" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {filteredQuestIds.map((questId) => (
+                        <SelectItem key={questId} value={questId}>
+                          {questId}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <p className="text-sm text-gray-500">No available quests</p>
+                )}
               </div>
 
               <div>
