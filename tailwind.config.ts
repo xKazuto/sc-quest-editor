@@ -24,6 +24,12 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        quest: {
+          primary: "#4A148C",
+          secondary: "#7B1FA2",
+          accent: "#FFD700",
+          background: "#F5F3FF",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

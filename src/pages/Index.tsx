@@ -1,12 +1,37 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import React from 'react';
+import QuestEditor from '@/components/QuestEditor';
+import { QuestData } from '@/lib/types';
 
 const Index = () => {
+  // Initialize with empty data structure
+  const initialData: QuestData = {
+    Quests: [],
+    QuestGivers: []
+  };
+
+  const handleSave = (data: QuestData) => {
+    // Here you would typically save to a file or backend
+    console.log('Saving quest data:', data);
+    const jsonString = JSON.stringify(data, null, 2);
+    
+    // Create a blob and download the file
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'quests.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-gray-100">
+      <QuestEditor
+        initialData={initialData}
+        onSave={handleSave}
+      />
     </div>
   );
 };
