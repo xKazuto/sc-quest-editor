@@ -6,10 +6,10 @@ import { createEmptyQuest } from '@/lib/questValidation';
 
 interface QuestListProps {
   quests: Quest[];
-  selectedQuestId: number | null;
+  selectedQuestId: string | null;
   onSelectQuest: (quest: Quest) => void;
   onAddQuest: () => void;
-  onRemoveQuest: (questId: number) => void;
+  onRemoveQuest: (questId: string) => void;
 }
 
 const QuestList: React.FC<QuestListProps> = ({

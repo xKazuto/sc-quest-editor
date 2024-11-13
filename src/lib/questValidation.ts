@@ -11,7 +11,7 @@ export const validateQuest = (quest: Partial<Quest>): string[] => {
 };
 
 export const createEmptyQuest = (): Quest => ({
-  Id: 0,
+  Id: '',
   TakerId: '',
   Type: 1,
   Name: '',
