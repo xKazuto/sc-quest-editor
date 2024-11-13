@@ -9,6 +9,11 @@ interface QuestBasicInfoProps {
 }
 
 export const QuestBasicInfo: React.FC<QuestBasicInfoProps> = ({ quest, onChange }) => {
+  const handlePreQuestsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const preQuests = e.target.value.split(',').map(id => id.trim()).filter(id => id);
+    onChange({ PreQuests: preQuests });
+  };
+
   return (
     <div className="space-y-4">
       <div>
@@ -44,6 +49,16 @@ export const QuestBasicInfo: React.FC<QuestBasicInfoProps> = ({ quest, onChange 
         <Input
           value={quest.Name}
           onChange={(e) => onChange({ Name: e.target.value })}
+          className="mt-1"
+        />
+      </div>
+
+      <div>
+        <label className="text-sm font-medium">Pre-Quests (comma-separated IDs)</label>
+        <Input
+          value={quest.PreQuests.join(', ')}
+          onChange={handlePreQuestsChange}
+          placeholder="quest1, quest2, quest3"
           className="mt-1"
         />
       </div>
