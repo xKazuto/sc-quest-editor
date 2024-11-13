@@ -2,23 +2,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
-
-interface User {
-  id: string;
-  isAdmin: boolean;
-}
-
-interface AuthContextType {
-  isAuthenticated: boolean;
-  currentUser: string | null;
-  isAdmin: boolean;
-  login: (id: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-  createUser: (id: string, password: string) => Promise<void>;
-  changePassword: (userId: string, newPassword: string) => Promise<void>;
-  removeUser: (userId: string) => Promise<void>;
-  users: User[];
-}
+import { User, AuthContextType } from '@/types/auth';
+import { fetchUsers, createUserInDb, removeUserFromDb, getCurrentUser } from '@/services/authService';
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -30,39 +15,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check for existing session
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        const { data: userData } = await supabase
-          .from('users')
-          .select('id, is_admin')
-          .eq('id', session.user.email)
-          .single();
-
+        const userData = await getCurrentUser(session.user.email!);
         if (userData) {
           setIsAuthenticated(true);
           setCurrentUser(userData.id);
-          setIsAdmin(userData.is_admin);
+          setIsAdmin(userData.isAdmin);
         }
       }
     };
 
     checkSession();
     
-    // Subscribe to auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session) {
-        const { data: userData } = await supabase
-          .from('users')
-          .select('id, is_admin')
-          .eq('id', session.user.email)
-          .single();
-
+        const userData = await getCurrentUser(session.user.email!);
         if (userData) {
           setIsAuthenticated(true);
           setCurrentUser(userData.id);
-          setIsAdmin(userData.is_admin);
+          setIsAdmin(userData.isAdmin);
         }
       } else if (event === 'SIGNED_OUT') {
         setIsAuthenticated(false);
@@ -77,21 +50,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const { data, error } = await supabase
-        .from('users')
-        .select('id, is_admin');
-      
-      if (error) {
-        toast.error('Failed to fetch users');
-        return;
-      }
-      
-      setUsers(data || []);
-    };
-
     if (isAdmin) {
-      fetchUsers();
+      fetchUsers().then(setUsers);
     }
   }, [isAdmin]);
 
@@ -135,12 +95,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (signUpError) throw signUpError;
 
-      const { error: insertError } = await supabase
-        .from('users')
-        .insert([{ id, is_admin: false }]);
-
-      if (insertError) throw insertError;
-
+      await createUserInDb(id, false);
       setUsers([...users, { id, isAdmin: false }]);
       toast.success('User created successfully');
     } catch (error) {
@@ -184,13 +139,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     try {
-      const { error } = await supabase
-        .from('users')
-        .delete()
-        .eq('id', userId);
-
-      if (error) throw error;
-
+      await removeUserFromDb(userId);
       setUsers(users.filter(user => user.id !== userId));
       toast.success('User removed successfully');
     } catch (error) {
