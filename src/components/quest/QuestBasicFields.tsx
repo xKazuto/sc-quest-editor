@@ -8,14 +8,18 @@ interface QuestBasicFieldsProps {
 }
 
 export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onChange }) => {
+  const handleInputChange = (field: keyof Quest, value: string | number) => {
+    onChange({ [field]: value });
+  };
+
   return (
     <div className="space-y-4">
       <div>
         <label className="text-sm font-medium">Quest ID</label>
         <Input
           type="text"
-          value={quest.Id}
-          onChange={(e) => onChange({ Id: e.target.value })}
+          value={quest.Id ?? ''}
+          onChange={(e) => handleInputChange('Id', e.target.value)}
           className="mt-1"
         />
       </div>
@@ -24,8 +28,8 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <label className="text-sm font-medium">Quest Type</label>
         <Input
           type="number"
-          value={quest.Type}
-          onChange={(e) => onChange({ Type: Number(e.target.value) })}
+          value={quest.Type ?? ''}
+          onChange={(e) => handleInputChange('Type', Number(e.target.value))}
           className="mt-1"
         />
       </div>
@@ -33,8 +37,8 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
       <div>
         <label className="text-sm font-medium">Taker ID</label>
         <Input
-          value={quest.TakerId}
-          onChange={(e) => onChange({ TakerId: e.target.value })}
+          value={quest.TakerId ?? ''}
+          onChange={(e) => handleInputChange('TakerId', e.target.value)}
           className="mt-1"
         />
       </div>
@@ -43,8 +47,8 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <label className="text-sm font-medium">Name</label>
         <Input
           type="text"
-          value={quest.Name}
-          onChange={(e) => onChange({ Name: e.target.value })}
+          value={quest.Name ?? ''}
+          onChange={(e) => handleInputChange('Name', e.target.value)}
           className="mt-1"
         />
       </div>
