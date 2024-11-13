@@ -1,6 +1,7 @@
 import React from 'react';
 import { Quest } from '@/lib/types';
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface QuestSoundSettingsProps {
   quest: Quest;
@@ -8,23 +9,30 @@ interface QuestSoundSettingsProps {
 }
 
 export const QuestSoundSettings: React.FC<QuestSoundSettingsProps> = ({ quest, onChange }) => {
+  const defaultSoundAccept = 'CRDTN_SoundSet_StalkerSounds_Pda_Tip';
+  const defaultSoundComplete = 'CRDTN_SoundSet_StalkerSounds_Pda_Alarm';
+
   return (
     <div className="space-y-4">
       <div>
-        <label className="text-sm font-medium">Sound Accept</label>
+        <Label htmlFor="soundAccept" className="text-sm font-medium">Sound Accept</Label>
         <Input
-          value={quest.SoundAccept || 'CRDTN_SoundSet_StalkerSounds_Pda_Tip'}
-          className="mt-1 bg-gray-100"
-          readOnly
+          id="soundAccept"
+          value={quest.SoundAccept || defaultSoundAccept}
+          onChange={(e) => onChange({ SoundAccept: e.target.value })}
+          placeholder={defaultSoundAccept}
+          className="mt-1"
         />
       </div>
 
       <div>
-        <label className="text-sm font-medium">Sound Complete</label>
+        <Label htmlFor="soundComplete" className="text-sm font-medium">Sound Complete</Label>
         <Input
-          value={quest.SoundComplete || 'CRDTN_SoundSet_StalkerSounds_Pda_Alarm'}
-          className="mt-1 bg-gray-100"
-          readOnly
+          id="soundComplete"
+          value={quest.SoundComplete || defaultSoundComplete}
+          onChange={(e) => onChange({ SoundComplete: e.target.value })}
+          placeholder={defaultSoundComplete}
+          className="mt-1"
         />
       </div>
     </div>
