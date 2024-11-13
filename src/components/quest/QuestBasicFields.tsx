@@ -38,7 +38,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <div className="flex gap-2">
           <Input
             name="Id"
-            value={quest.Id}
+            value={quest.Id || ''}
             onChange={handleInputChange}
             placeholder="Enter Quest ID"
           />
