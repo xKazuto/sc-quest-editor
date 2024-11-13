@@ -32,19 +32,22 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
       <div>
         <label className="text-sm font-medium">Quest ID</label>
         <div className="flex gap-2 mt-1">
-          <Input
-            value={quest.Id || ''}
-            onChange={(e) => handleInputChange('Id', e.target.value)}
-            className="flex-1"
-            placeholder="No ID generated yet"
-          />
-          <Button 
-            variant="outline"
-            onClick={generateQuestId}
-            type="button"
-          >
-            Generate ID
-          </Button>
+          <div className="flex-1 relative">
+            <Input
+              value={quest.Id ?? ''}
+              onChange={(e) => handleInputChange('Id', e.target.value)}
+              className="w-full pr-24"
+              placeholder="Enter Quest ID"
+            />
+            <Button 
+              variant="outline"
+              onClick={generateQuestId}
+              className="absolute right-0 top-0 h-full rounded-l-none"
+              type="button"
+            >
+              Generate
+            </Button>
+          </div>
         </div>
       </div>
 
