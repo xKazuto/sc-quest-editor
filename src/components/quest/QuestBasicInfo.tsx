@@ -22,6 +22,7 @@ export const QuestBasicInfo: React.FC<QuestBasicInfoProps> = ({ quest, onChange 
           value={quest.Id}
           onChange={(e) => onChange({ Id: e.target.value })}
           className="mt-1"
+          placeholder="Enter Quest ID"
         />
       </div>
 
