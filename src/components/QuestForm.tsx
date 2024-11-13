@@ -7,7 +7,7 @@ import { QuestBasicInfo } from './quest/QuestBasicInfo';
 import { QuestGoalItem } from './quest/QuestGoalItem';
 import { QuestRewardItem } from './quest/QuestRewardItem';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 interface QuestFormProps {
   quest: Quest;
@@ -63,11 +63,11 @@ export const QuestForm: React.FC<QuestFormProps> = ({ quest, onChange }) => {
       <div>
         <h3 className="text-lg font-semibold mb-4">Goals</h3>
         {quest.Goals.map((goal, index) => (
-          <Collapsible key={index} className="mb-4">
-            <div className="flex items-center gap-2 mb-2">
+          <Collapsible key={index} className="p-4 border rounded-md mb-4">
+            <div className="flex items-center gap-2">
               <CollapsibleTrigger className="flex items-center gap-2">
                 <ChevronRight className="h-4 w-4" />
-                <span>Goal {index + 1}</span>
+                <span className="font-medium">Goal {index + 1}</span>
               </CollapsibleTrigger>
               <Button
                 variant="destructive"
@@ -78,7 +78,7 @@ export const QuestForm: React.FC<QuestFormProps> = ({ quest, onChange }) => {
                 Remove
               </Button>
             </div>
-            <CollapsibleContent>
+            <CollapsibleContent className="space-y-4 mt-4">
               <QuestGoalItem
                 goal={goal}
                 index={index}
