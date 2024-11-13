@@ -110,8 +110,8 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
   const selectedQuest = questData.Quests.find(q => q.Id === selectedQuestId);
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <div className="w-64 border-r bg-white">
+    <div className="flex h-screen bg-background">
+      <div className="w-64 border-r bg-background border-border">
         <div className="p-4 space-y-2">
           <Button onClick={handleAddQuest} className="w-full">
             Add New Quest
@@ -134,9 +134,9 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
           onRemoveQuest={handleRemoveQuest}
         />
       </div>
-      <div className="flex-1 p-6 overflow-auto">
-        <Tabs defaultValue="quests">
-          <TabsList>
+      <div className="flex-1 p-6 overflow-auto bg-background">
+        <Tabs defaultValue="quests" className="w-full">
+          <TabsList className="mb-4">
             <TabsTrigger value="quests">Quests</TabsTrigger>
             <TabsTrigger value="questgivers">Quest Givers</TabsTrigger>
           </TabsList>
@@ -144,7 +144,7 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
             {selectedQuest ? (
               <>
                 <div className="flex justify-between mb-6">
-                  <h2 className="text-2xl font-bold">
+                  <h2 className="text-2xl font-bold text-foreground">
                     Editing Quest: {selectedQuest.Name || 'Unnamed Quest'}
                   </h2>
                   <Button onClick={handleSave}>
@@ -157,7 +157,7 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
                 />
               </>
             ) : (
-              <div className="flex items-center justify-center h-full text-gray-500">
+              <div className="flex items-center justify-center h-full text-muted-foreground">
                 Select a quest to edit or create a new one
               </div>
             )}
@@ -165,7 +165,7 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
           <TabsContent value="questgivers">
             <div className="space-y-4">
               <div className="flex justify-between mb-6">
-                <h2 className="text-2xl font-bold">Quest Givers</h2>
+                <h2 className="text-2xl font-bold text-foreground">Quest Givers</h2>
                 <Button onClick={handleSave}>
                   Save Changes
                 </Button>
