@@ -54,7 +54,7 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
             onChange({ State: checked as boolean })
           }
         />
-        <label htmlFor={`goal-state-${index}`}>State</label>
+        <label htmlFor={`goal-state-${index}`}>Is Quest done on take?</label>
       </div>
 
       <div>
