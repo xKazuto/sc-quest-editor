@@ -20,7 +20,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
     const timestamp = Date.now();
     const randomStr = Math.random().toString(36).substring(2, 7);
     const newId = `QUEST_${timestamp}_${randomStr}`;
-    handleInputChange('Id', newId);
+    onChange({ Id: newId });
     toast({
       title: "Quest ID Generated",
       description: "A new Quest ID has been automatically generated.",
@@ -32,9 +32,12 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
       <div>
         <label className="text-sm font-medium">Quest ID</label>
         <div className="flex gap-2 mt-1">
-          <div className="flex-1 p-2 bg-gray-50 border rounded-md text-gray-600">
-            {quest.Id || 'No ID generated yet'}
-          </div>
+          <Input
+            value={quest.Id}
+            onChange={(e) => handleInputChange('Id', e.target.value)}
+            className="flex-1"
+            placeholder="No ID generated yet"
+          />
           <Button 
             variant="outline"
             onClick={generateQuestId}
