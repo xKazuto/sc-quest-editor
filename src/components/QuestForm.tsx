@@ -11,7 +11,7 @@ interface QuestFormProps {
   onChange: (quest: Quest) => void;
 }
 
-export const QuestForm: React.FC<QuestFormProps> = ({ quest, onChange }) => {
+const QuestForm: React.FC<QuestFormProps> = ({ quest, onChange }) => {
   const updateQuest = (updates: Partial<Quest>) => {
     onChange({ ...quest, ...updates });
   };
@@ -20,17 +20,14 @@ export const QuestForm: React.FC<QuestFormProps> = ({ quest, onChange }) => {
     <Card>
       <CardContent className="space-y-6 p-6">
         <QuestBasicInfo quest={quest} onChange={updateQuest} />
-        
         <QuestDescription 
           description={quest.Description ?? ''} 
           onChange={(description) => updateQuest({ Description: description })} 
         />
-
         <QuestGoals 
           goals={quest.Goals} 
           onChange={(goals) => updateQuest({ Goals: goals })} 
         />
-
         <QuestRewards 
           rewards={quest.Rewards} 
           onChange={(rewards) => updateQuest({ Rewards: rewards })} 

@@ -123,8 +123,7 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
         <QuestList
           quests={questData.Quests}
           selectedQuestId={selectedQuestId}
-          onSelectQuest={(quest) => setSelectedQuestId(quest.Id)}
-          onAddQuest={handleAddQuest}
+          onSelectQuest={setSelectedQuestId}
           onRemoveQuest={handleRemoveQuest}
         />
       </div>
