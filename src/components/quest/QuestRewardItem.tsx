@@ -4,13 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronRight } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { HelpCircle } from 'lucide-react';
 
 interface QuestRewardItemProps {
   reward: Reward;
@@ -45,88 +38,48 @@ export const QuestRewardItem: React.FC<QuestRewardItemProps> = ({ reward, index,
       </div>
 
       <CollapsibleContent className="space-y-4 mt-4">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <div className="flex-grow">
-              <Input
-                type="number"
-                value={reward.RewardType}
-                onChange={(e) => onChange({ RewardType: Number(e.target.value) })}
-                placeholder="Reward Type"
-              />
-            </div>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <HelpCircle className="h-5 w-5" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{fieldDescriptions.rewardType}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+        <div className="space-y-4">
+          <div>
+            <p className="text-sm text-gray-600 mb-1">{fieldDescriptions.rewardType}</p>
+            <Input
+              type="number"
+              value={reward.RewardType}
+              onChange={(e) => onChange({ RewardType: Number(e.target.value) })}
+              placeholder="Reward Type"
+            />
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="flex-grow">
-              <Input
-                value={reward.ClassName}
-                onChange={(e) => onChange({ ClassName: e.target.value })}
-                placeholder="Class Name"
-              />
-            </div>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <HelpCircle className="h-5 w-5" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{fieldDescriptions.className}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+          <div>
+            <p className="text-sm text-gray-600 mb-1">{fieldDescriptions.className}</p>
+            <Input
+              value={reward.ClassName}
+              onChange={(e) => onChange({ ClassName: e.target.value })}
+              placeholder="Class Name"
+            />
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="flex-grow">
-              <Input
-                type="number"
-                value={reward.Amount}
-                onChange={(e) => onChange({ Amount: Number(e.target.value) })}
-                placeholder="Amount"
-              />
-            </div>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <HelpCircle className="h-5 w-5" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{fieldDescriptions.amount}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+          <div>
+            <p className="text-sm text-gray-600 mb-1">{fieldDescriptions.amount}</p>
+            <Input
+              type="number"
+              step="1"
+              value={reward.Amount}
+              onChange={(e) => onChange({ Amount: Math.floor(Number(e.target.value)) })}
+              placeholder="Amount"
+              onWheel={(e) => e.currentTarget.blur()}
+            />
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="flex-grow">
-              <Input
-                type="number"
-                value={reward.Quantity}
-                onChange={(e) => onChange({ Quantity: Number(e.target.value) })}
-                placeholder="Quantity"
-              />
-            </div>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <HelpCircle className="h-5 w-5" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{fieldDescriptions.quantity}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+          <div>
+            <p className="text-sm text-gray-600 mb-1">{fieldDescriptions.quantity}</p>
+            <Input
+              type="number"
+              step="1"
+              value={reward.Quantity}
+              onChange={(e) => onChange({ Quantity: Math.floor(Number(e.target.value)) })}
+              placeholder="Quantity"
+              onWheel={(e) => e.currentTarget.blur()}
+            />
           </div>
         </div>
       </CollapsibleContent>
