@@ -96,7 +96,10 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
   const handleQuestGiversUpdate = (newQuestGivers: QuestGiver[]) => {
     setQuestData(prev => ({
       ...prev,
-      QuestGivers: newQuestGivers
+      QuestGivers: newQuestGivers.map(qg => ({
+        ...qg,
+        Quests: qg.Quests.map(id => Number(id))
+      }))
     }));
   };
 
