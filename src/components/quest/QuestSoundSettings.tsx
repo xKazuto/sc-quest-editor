@@ -13,20 +13,18 @@ export const QuestSoundSettings: React.FC<QuestSoundSettingsProps> = ({ quest, o
       <div>
         <label className="text-sm font-medium">Sound Accept</label>
         <Input
-          value={quest.SoundAccept || ''}
-          onChange={(e) => onChange({ SoundAccept: e.target.value })}
-          className="mt-1"
-          placeholder="Enter sound accept path"
+          value={quest.SoundAccept || 'CRDTN_SoundSet_StalkerSounds_Pda_Tip'}
+          className="mt-1 bg-gray-100"
+          readOnly
         />
       </div>
 
       <div>
         <label className="text-sm font-medium">Sound Complete</label>
         <Input
-          value={quest.SoundComplete || ''}
-          onChange={(e) => onChange({ SoundComplete: e.target.value })}
-          className="mt-1"
-          placeholder="Enter sound complete path"
+          value={quest.SoundComplete || 'CRDTN_SoundSet_StalkerSounds_Pda_Alarm'}
+          className="mt-1 bg-gray-100"
+          readOnly
         />
       </div>
     </div>
