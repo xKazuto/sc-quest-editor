@@ -144,7 +144,7 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
             {selectedQuest ? (
               <>
                 <div className="flex justify-between mb-6">
-                  <h2 className="text-2xl font-bold">
+                  <h2 className="text-2xl font-bold text-black">
                     Editing Quest: {selectedQuest.Name || 'Unnamed Quest'}
                   </h2>
                   <Button onClick={handleSave}>
