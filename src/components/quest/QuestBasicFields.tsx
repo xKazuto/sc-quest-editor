@@ -8,21 +8,6 @@ interface QuestBasicFieldsProps {
 }
 
 export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onChange }) => {
-  const generateQuestId = (name: string) => {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '_')
-      .replace(/^_+|_+$/g, '');
-  };
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newName = e.target.value;
-    onChange({
-      Name: newName,
-      Id: generateQuestId(newName)
-    });
-  };
-
   return (
     <div className="space-y-4">
       <div>
@@ -30,8 +15,8 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <Input
           type="text"
           value={quest.Id || ''}
-          readOnly
-          className="mt-1 bg-gray-100"
+          onChange={(e) => onChange({ Id: e.target.value })}
+          className="mt-1"
         />
       </div>
 
@@ -59,7 +44,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <Input
           type="text"
           value={quest.Name || ''}
-          onChange={handleNameChange}
+          onChange={(e) => onChange({ Name: e.target.value })}
           className="mt-1"
         />
       </div>
