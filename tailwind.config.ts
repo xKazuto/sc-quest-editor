@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -22,7 +21,7 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "#2C3E50", // A softer, more muted dark gray
+        background: "#2C3E50",
         foreground: "hsl(var(--foreground))",
         quest: {
           primary: "#4A148C",
