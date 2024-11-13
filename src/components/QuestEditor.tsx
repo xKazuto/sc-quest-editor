@@ -51,9 +51,16 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
   const handleQuestChange = (updatedQuest: Quest) => {
     setQuestData(prev => ({
       ...prev,
-      Quests: prev.Quests.map(q => 
-        q.Id === selectedQuestId ? updatedQuest : q
-      )
+      Quests: prev.Quests.map(q => {
+        if (q.Id === selectedQuestId) {
+          // If the ID is being updated, update the selectedQuestId as well
+          if (updatedQuest.Id !== q.Id) {
+            setSelectedQuestId(updatedQuest.Id);
+          }
+          return updatedQuest;
+        }
+        return q;
+      })
     }));
   };
 
