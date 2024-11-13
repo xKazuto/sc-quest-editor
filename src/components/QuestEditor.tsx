@@ -137,7 +137,7 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
           onRemoveQuest={handleRemoveQuest}
         />
       </div>
-      <div className="flex-1 p-6 overflow-auto bg-gray-100">
+      <div className="flex-1 p-6 overflow-auto bg-[#737373]">
         <Tabs defaultValue="quests">
           <TabsList>
             <TabsTrigger value="quests">Quests</TabsTrigger>
