@@ -48,14 +48,29 @@ export const QuestBasicInfo: React.FC<QuestBasicInfoProps> = ({ quest, onChange 
         />
       </div>
 
-      <div>
-        <label className="text-sm font-medium">Event ID</label>
-        <Input
-          value={quest.EventId}
-          onChange={(e) => onChange({ EventId: e.target.value })}
-          className="mt-1"
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id="eventSendToClient"
+          checked={quest.EventSendToClient}
+          onCheckedChange={(checked) => 
+            onChange({ EventSendToClient: checked as boolean })
+          }
         />
+        <label htmlFor="eventSendToClient" className="text-sm font-medium">
+          Event Send To Client
+        </label>
       </div>
+
+      {quest.EventSendToClient && (
+        <div>
+          <label className="text-sm font-medium">Event ID</label>
+          <Input
+            value={quest.EventId}
+            onChange={(e) => onChange({ EventId: e.target.value })}
+            className="mt-1"
+          />
+        </div>
+      )}
 
       <div>
         <label className="text-sm font-medium">Sound Accept</label>
@@ -75,53 +90,44 @@ export const QuestBasicInfo: React.FC<QuestBasicInfoProps> = ({ quest, onChange 
         />
       </div>
 
-      <div>
-        <label className="text-sm font-medium">Repeat Duration (Hours)</label>
-        <Input
-          type="number"
-          value={quest.RepeatDurationHours}
-          onChange={(e) => onChange({ RepeatDurationHours: Number(e.target.value) })}
-          className="mt-1"
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id="isRepeatable"
+          checked={quest.IsRepeatable}
+          onCheckedChange={(checked) => 
+            onChange({ IsRepeatable: checked as boolean })
+          }
         />
+        <label htmlFor="isRepeatable" className="text-sm font-medium">
+          Is Repeatable
+        </label>
       </div>
 
-      <div>
-        <label className="text-sm font-medium">Repeat Duration (Minutes)</label>
-        <Input
-          type="number"
-          value={quest.RepeatDurationMinutes}
-          onChange={(e) => onChange({ RepeatDurationMinutes: Number(e.target.value) })}
-          className="mt-1"
-        />
-      </div>
+      {quest.IsRepeatable && (
+        <>
+          <div>
+            <label className="text-sm font-medium">Repeat Duration (Hours)</label>
+            <Input
+              type="number"
+              value={quest.RepeatDurationHours}
+              onChange={(e) => onChange({ RepeatDurationHours: Number(e.target.value) })}
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium">Repeat Duration (Minutes)</label>
+            <Input
+              type="number"
+              value={quest.RepeatDurationMinutes}
+              onChange={(e) => onChange({ RepeatDurationMinutes: Number(e.target.value) })}
+              className="mt-1"
+            />
+          </div>
+        </>
+      )}
 
       <div className="space-y-2">
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="isRepeatable"
-            checked={quest.IsRepeatable}
-            onCheckedChange={(checked) => 
-              onChange({ IsRepeatable: checked as boolean })
-            }
-          />
-          <label htmlFor="isRepeatable" className="text-sm font-medium">
-            Is Repeatable
-          </label>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="eventSendToClient"
-            checked={quest.EventSendToClient}
-            onCheckedChange={(checked) => 
-              onChange({ EventSendToClient: checked as boolean })
-            }
-          />
-          <label htmlFor="eventSendToClient" className="text-sm font-medium">
-            Event Send To Client
-          </label>
-        </div>
-
         <div className="flex items-center space-x-2">
           <Checkbox
             id="resetKillsComplete"
