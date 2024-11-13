@@ -12,7 +12,6 @@ export const fetchUsers = async (): Promise<User[]> => {
     return [];
   }
   
-  // Map the database response to our User interface
   return (data || []).map(user => ({
     id: user.id,
     isAdmin: user.is_admin
@@ -25,6 +24,26 @@ export const createUserInDb = async (id: string, isAdmin: boolean = false): Prom
     .insert([{ id, is_admin: isAdmin }]);
 
   if (error) throw error;
+};
+
+export const createAdminUser = async (email: string, password: string): Promise<void> => {
+  try {
+    // First create the auth user
+    const { error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (signUpError) throw signUpError;
+
+    // Then create the admin user in the users table
+    await createUserInDb(email, true);
+    
+    toast.success('Admin user created successfully');
+  } catch (error) {
+    toast.error('Failed to create admin user');
+    throw error;
+  }
 };
 
 export const removeUserFromDb = async (userId: string): Promise<void> => {
