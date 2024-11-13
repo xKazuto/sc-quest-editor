@@ -13,10 +13,10 @@ interface QuestRewardItemProps {
 }
 
 const fieldDescriptions: Record<string, string> = {
-  rewardType: "Type of reward (1: XP, 2: Currency, 3: Item, 4: Reputation, 5: Skill Points)",
+  rewardType: "Type of reward (1: Item, 2: License)",
   className: "The specific class or identifier of the reward item",
-  amount: "The numerical value or amount of the reward",
-  quantity: "How many of this reward item to give"
+  amount: "Amount",
+  quantity: "Quantity"
 };
 
 export const QuestRewardItem: React.FC<QuestRewardItemProps> = ({ reward, index, onChange, onRemove }) => {
