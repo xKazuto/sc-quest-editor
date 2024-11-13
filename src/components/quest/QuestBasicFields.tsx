@@ -18,21 +18,10 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <label className="text-sm font-medium">Quest ID</label>
         <Input
           type="text"
-          value={quest.Id || ''}
+          value={quest.Id}
           onChange={(e) => handleInputChange('Id', e.target.value)}
           className="mt-1"
           placeholder="Enter Quest ID"
-        />
-      </div>
-
-      <div>
-        <label className="text-sm font-medium">Alternative Quest ID</label>
-        <Input
-          type="text"
-          value={quest.Id || ''}
-          onChange={(e) => handleInputChange('Id', e.target.value)}
-          className="mt-1"
-          placeholder="Enter Alternative Quest ID"
         />
       </div>
 
