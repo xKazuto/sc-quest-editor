@@ -45,7 +45,7 @@ export interface Reward {
 
 export interface QuestGiver {
   Id: string;
-  Quests: string[];
+  Quests: number[];
 }
 
 export interface QuestData {
