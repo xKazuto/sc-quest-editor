@@ -28,7 +28,10 @@ export default {
           primary: "#4A148C",
           secondary: "#7B1FA2",
           accent: "#FFD700",
-          background: "#F5F3FF",
+          background: "#1A1F2C",
+          text: "#F1F0FB",
+          hover: "#2C3344",
+          selected: "#403E43",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

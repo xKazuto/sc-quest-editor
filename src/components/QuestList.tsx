@@ -18,14 +18,14 @@ const QuestList: React.FC<QuestListProps> = ({
 }) => {
   return (
     <ScrollArea className="h-[calc(100vh-8rem)]">
-      <div className="space-y-2 p-4">
+      <div className="space-y-2 p-4 bg-quest-background">
         {quests.map((quest) => (
           <div
             key={quest.Id}
             className={`p-3 rounded-lg cursor-pointer transition-colors ${
               selectedQuestId === quest.Id
-                ? 'bg-primary text-primary-foreground'
-                : 'hover:bg-muted'
+                ? 'bg-quest-selected text-quest-text'
+                : 'bg-quest-background text-quest-text hover:bg-quest-hover'
             }`}
             onClick={() => onSelectQuest(quest.Id)}
           >
