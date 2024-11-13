@@ -33,7 +33,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <label className="text-sm font-medium">Quest ID</label>
         <div className="flex gap-2 mt-1">
           <div className="flex-1 p-2 bg-gray-50 border rounded-md text-gray-600">
-            {quest.Id || 'No ID generated yet'}
+            {quest.Id ? quest.Id : 'No ID generated yet'}
           </div>
           <Button 
             variant="outline"
