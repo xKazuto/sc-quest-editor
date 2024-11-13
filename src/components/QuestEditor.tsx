@@ -147,7 +147,10 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
                   <h2 className="text-2xl font-bold text-black">
                     Editing Quest: {selectedQuest.Name || 'Unnamed Quest'}
                   </h2>
-                  <Button onClick={handleSave}>
+                  <Button 
+                    onClick={handleSave}
+                    className="bg-quest-background text-quest-text hover:bg-quest-hover"
+                  >
                     Save Changes
                   </Button>
                 </div>
