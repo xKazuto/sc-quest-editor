@@ -52,7 +52,7 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
     setQuestData(prev => ({
       ...prev,
       Quests: prev.Quests.map(q => 
-        q.Id === updatedQuest.Id ? updatedQuest : q
+        q.Id === selectedQuestId ? updatedQuest : q
       )
     }));
   };
