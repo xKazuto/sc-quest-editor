@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 
 interface QuestGoalItemProps {
   goal: Goal;
@@ -22,9 +23,23 @@ const fieldDescriptions: Record<string, string> = {
   triggerRadius: "Radius of trigger area",
   triggerId: "Unique Waypoint ID", // Updated description
   triggerEventId: "Event ID for the trigger",
+  description: "Description shown to the player in the quest log",
 };
 
 export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onChange, onRemove }) => {
+  const { toast } = useToast();
+
+  const generateRandomWaypointId = () => {
+    const timestamp = Date.now();
+    const randomStr = Math.random().toString(36).substring(2, 7);
+    const newId = `WP_${timestamp}_${randomStr}`;
+    onChange({ TriggerId: newId });
+    toast({
+      title: "Waypoint ID Generated",
+      description: "A new Waypoint ID has been automatically generated.",
+    });
+  };
+
   return (
     <div className="space-y-2 pt-4">
       <div>
@@ -107,11 +122,20 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
 
       <div>
         <p className="text-sm text-gray-600 mb-1">{fieldDescriptions.triggerId}</p>
-        <Input
-          value={goal.TriggerId}
-          onChange={(e) => onChange({ TriggerId: e.target.value })}
-          placeholder="Trigger ID"
-        />
+        <div className="flex gap-2">
+          <Input
+            value={goal.TriggerId}
+            onChange={(e) => onChange({ TriggerId: e.target.value })}
+            placeholder="Trigger ID"
+          />
+          <Button 
+            variant="outline"
+            onClick={generateRandomWaypointId}
+            type="button"
+          >
+            Generate
+          </Button>
+        </div>
       </div>
 
       <div>
@@ -134,11 +158,14 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
         <label htmlFor={`trigger-send-${index}`}>Trigger Send To Client</label>
       </div>
 
-      <Textarea
-        value={goal.Description}
-        onChange={(e) => onChange({ Description: e.target.value })}
-        placeholder="Description"
-      />
+      <div>
+        <p className="text-sm text-gray-600 mb-1">{fieldDescriptions.description}</p>
+        <Textarea
+          value={goal.Description}
+          onChange={(e) => onChange({ Description: e.target.value })}
+          placeholder="Description"
+        />
+      </div>
 
       <div className="flex items-center space-x-2">
         <Checkbox
