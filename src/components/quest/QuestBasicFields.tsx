@@ -33,7 +33,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <label className="text-sm font-medium">Quest ID</label>
         <div className="flex gap-2 mt-1">
           <Input
-            value={quest.Id}
+            value={quest.Id || ''}
             onChange={(e) => handleInputChange('Id', e.target.value)}
             className="flex-1"
             placeholder="No ID generated yet"
