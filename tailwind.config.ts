@@ -22,7 +22,7 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
+        background: "#6b6b6b", // Set the global background color
         foreground: "hsl(var(--foreground))",
         quest: {
           primary: "#4A148C",
