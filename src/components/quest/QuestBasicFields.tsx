@@ -38,7 +38,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <div className="flex gap-2">
           <Input
             name="Id"
-            value={quest.Id || ''}
+            value={quest.Id}
             onChange={handleInputChange}
             placeholder="Enter Quest ID"
           />
@@ -57,7 +57,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <Input
           name="Type"
           type="number"
-          value={quest.Type}
+          value={quest.Type || 0}
           onChange={handleInputChange}
           placeholder="Enter Quest Type"
         />
@@ -67,7 +67,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <Label>Taker ID</Label>
         <Input
           name="TakerId"
-          value={quest.TakerId}
+          value={quest.TakerId || ''}
           onChange={handleInputChange}
           placeholder="Enter Taker ID"
         />
@@ -77,7 +77,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <Label>Name</Label>
         <Input
           name="Name"
-          value={quest.Name}
+          value={quest.Name || ''}
           onChange={handleInputChange}
           placeholder="Enter Quest Name"
         />
