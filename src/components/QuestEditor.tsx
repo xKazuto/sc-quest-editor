@@ -113,7 +113,10 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
     <div className="flex h-screen bg-gray-100">
       <div className="w-64 border-r bg-white">
         <div className="p-4 space-y-2">
-          <Button onClick={handleAddQuest} className="w-full">
+          <Button 
+            onClick={handleAddQuest} 
+            className="w-full bg-quest-background text-quest-text hover:bg-quest-hover"
+          >
             Add New Quest
           </Button>
           <Button onClick={handleUploadClick} variant="outline" className="w-full">
