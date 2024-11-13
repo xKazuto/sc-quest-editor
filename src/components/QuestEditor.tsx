@@ -2,10 +2,12 @@ import React, { useState, useRef } from 'react';
 import { Quest, QuestData } from '@/lib/types';
 import QuestList from './QuestList';
 import QuestForm from './QuestForm';
+import QuestGiverEditor from './QuestGiverEditor';
 import { createEmptyQuest } from '@/lib/questValidation';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface QuestEditorProps {
   initialData: QuestData;
@@ -91,6 +93,13 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
     fileInputRef.current?.click();
   };
 
+  const handleQuestGiversUpdate = (newQuestGivers: QuestGiver[]) => {
+    setQuestData(prev => ({
+      ...prev,
+      QuestGivers: newQuestGivers
+    }));
+  };
+
   const selectedQuest = questData.Quests.find(q => q.Id === selectedQuestId);
 
   return (
@@ -120,26 +129,49 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
         />
       </div>
       <div className="flex-1 p-6 overflow-auto">
-        {selectedQuest ? (
-          <>
-            <div className="flex justify-between mb-6">
-              <h2 className="text-2xl font-bold">
-                Editing Quest: {selectedQuest.Name || 'Unnamed Quest'}
-              </h2>
-              <Button onClick={handleSave}>
-                Save Changes
-              </Button>
+        <Tabs defaultValue="quests">
+          <TabsList>
+            <TabsTrigger value="quests">Quests</TabsTrigger>
+            <TabsTrigger value="questgivers">Quest Givers</TabsTrigger>
+          </TabsList>
+          <TabsContent value="quests">
+            {selectedQuest ? (
+              <>
+                <div className="flex justify-between mb-6">
+                  <h2 className="text-2xl font-bold">
+                    Editing Quest: {selectedQuest.Name || 'Unnamed Quest'}
+                  </h2>
+                  <Button onClick={handleSave}>
+                    Save Changes
+                  </Button>
+                </div>
+                <QuestForm
+                  quest={selectedQuest}
+                  onChange={handleQuestChange}
+                />
+              </>
+            ) : (
+              <div className="flex items-center justify-center h-full text-gray-500">
+                Select a quest to edit or create a new one
+              </div>
+            )}
+          </TabsContent>
+          <TabsContent value="questgivers">
+            <div className="space-y-4">
+              <div className="flex justify-between mb-6">
+                <h2 className="text-2xl font-bold">Quest Givers</h2>
+                <Button onClick={handleSave}>
+                  Save Changes
+                </Button>
+              </div>
+              <QuestGiverEditor
+                questGivers={questData.QuestGivers}
+                onUpdate={handleQuestGiversUpdate}
+                availableQuestIds={questData.Quests.map(q => q.Id)}
+              />
             </div>
-            <QuestForm
-              quest={selectedQuest}
-              onChange={handleQuestChange}
-            />
-          </>
-        ) : (
-          <div className="flex items-center justify-center h-full text-gray-500">
-            Select a quest to edit or create a new one
-          </div>
-        )}
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
