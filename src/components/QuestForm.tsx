@@ -103,15 +103,15 @@ export const QuestForm: React.FC<QuestFormProps> = ({ quest, onChange }) => {
               </div>
               <div className="space-y-2">
                 <Input
+                  type="number"
+                  value={goal.Type}
+                  onChange={(e) => updateGoal(index, { Type: Number(e.target.value) })}
+                  placeholder="Type"
+                />
+                <Input
                   value={goal.ClassName}
                   onChange={(e) => updateGoal(index, { ClassName: e.target.value })}
                   placeholder="Class Name"
-                />
-                <Input
-                  type="number"
-                  value={goal.Count}
-                  onChange={(e) => updateGoal(index, { Count: Number(e.target.value) })}
-                  placeholder="Count"
                 />
                 <div className="flex items-center space-x-2">
                   <Checkbox
@@ -122,6 +122,69 @@ export const QuestForm: React.FC<QuestFormProps> = ({ quest, onChange }) => {
                     }
                   />
                   <label htmlFor={`goal-state-${index}`}>State</label>
+                </div>
+                <Input
+                  type="number"
+                  value={goal.Count}
+                  onChange={(e) => updateGoal(index, { Count: Number(e.target.value) })}
+                  placeholder="Count"
+                />
+                <Input
+                  type="number"
+                  value={goal.Quantity}
+                  onChange={(e) => updateGoal(index, { Quantity: Number(e.target.value) })}
+                  placeholder="Quantity"
+                />
+                <Input
+                  value={goal.Value}
+                  onChange={(e) => updateGoal(index, { Value: e.target.value })}
+                  placeholder="Value"
+                />
+                <Input
+                  value={goal.TriggerCoordinate}
+                  onChange={(e) => updateGoal(index, { TriggerCoordinate: e.target.value })}
+                  placeholder="Trigger Coordinate"
+                />
+                <Input
+                  type="number"
+                  value={goal.TriggerRadius}
+                  onChange={(e) => updateGoal(index, { TriggerRadius: Number(e.target.value) })}
+                  placeholder="Trigger Radius"
+                />
+                <Input
+                  value={goal.TriggerId}
+                  onChange={(e) => updateGoal(index, { TriggerId: e.target.value })}
+                  placeholder="Trigger ID"
+                />
+                <Input
+                  value={goal.TriggerEventId}
+                  onChange={(e) => updateGoal(index, { TriggerEventId: e.target.value })}
+                  placeholder="Trigger Event ID"
+                />
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id={`trigger-send-${index}`}
+                    checked={goal.TriggerSendToClient}
+                    onCheckedChange={(checked) => 
+                      updateGoal(index, { TriggerSendToClient: checked as boolean })
+                    }
+                  />
+                  <label htmlFor={`trigger-send-${index}`}>Trigger Send To Client</label>
+                </div>
+                <Textarea
+                  value={goal.Description}
+                  onChange={(e) => updateGoal(index, { Description: e.target.value })}
+                  placeholder="Description"
+                />
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id={`keep-item-${index}`}
+                    checked={goal.KeepItem}
+                    onCheckedChange={(checked) => 
+                      updateGoal(index, { KeepItem: checked as boolean })
+                    }
+                  />
+                  <label htmlFor={`keep-item-${index}`}>Keep Item</label>
                 </div>
               </div>
             </div>
