@@ -28,6 +28,17 @@ export const createUserInDb = async (id: string, isAdmin: boolean = false): Prom
 
 export const createAdminUser = async (email: string, password: string): Promise<void> => {
   try {
+    // Check if any admin users already exist
+    const { data: existingAdmins } = await supabase
+      .from('users')
+      .select('id')
+      .eq('is_admin', true)
+      .limit(1);
+
+    if (existingAdmins && existingAdmins.length > 0) {
+      throw new Error('An admin user already exists');
+    }
+
     // First create the auth user
     const { error: signUpError } = await supabase.auth.signUp({
       email,
