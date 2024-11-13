@@ -1,20 +1,20 @@
 import React from 'react';
 import QuestEditor from '@/components/QuestEditor';
 import { QuestData } from '@/lib/types';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
-  // Initialize with empty data structure
+  const { logout } = useAuth();
   const initialData: QuestData = {
     Quests: [],
     QuestGivers: []
   };
 
   const handleSave = (data: QuestData) => {
-    // Here you would typically save to a file or backend
     console.log('Saving quest data:', data);
     const jsonString = JSON.stringify(data, null, 2);
     
-    // Create a blob and download the file
     const blob = new Blob([jsonString], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -28,6 +28,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      <div className="p-4 flex justify-end">
+        <Button variant="outline" onClick={logout}>
+          Logout
+        </Button>
+      </div>
       <QuestEditor
         initialData={initialData}
         onSave={handleSave}
