@@ -57,7 +57,8 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
       <div>
         <label className="text-sm font-medium">Name</label>
         <Input
-          value={quest.Name}
+          type="text"
+          value={quest.Name || ''}
           onChange={handleNameChange}
           className="mt-1"
         />
