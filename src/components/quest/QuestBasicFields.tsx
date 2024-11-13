@@ -34,12 +34,12 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <div className="flex gap-2 mt-1">
           <div className="flex-1 relative">
             <Input
-              value={quest.Id ?? ''}
+              value={quest.Id}
               onChange={(e) => handleInputChange('Id', e.target.value)}
               className="w-full pr-24"
               placeholder="Enter Quest ID"
               type="text"
-              readOnly={false}
+              disabled={false}
             />
             <Button 
               variant="outline"
