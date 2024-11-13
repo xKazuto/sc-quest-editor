@@ -29,7 +29,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen" style={{ backgroundColor: '#6b6b6b' }}>
       <div className="p-4 flex justify-end">
         <Button variant="outline" onClick={logout}>
           Logout
