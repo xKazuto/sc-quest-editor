@@ -16,12 +16,12 @@ interface AuthContextType {
   logout: () => void;
   createUser: (id: string, password: string) => void;
   changePassword: (userId: string, newPassword: string) => void;
+  removeUser: (userId: string) => void;
   users: User[];
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// Initialize with admin user
 const initialUsers: User[] = [{
   id: 'admin',
   password: 'password123',
@@ -85,6 +85,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     toast.success('Password changed successfully');
   };
 
+  const removeUser = (userId: string) => {
+    if (!isAdmin) {
+      toast.error('Only admins can remove users');
+      return;
+    }
+
+    if (userId === 'admin') {
+      toast.error('Cannot remove admin user');
+      return;
+    }
+
+    if (userId === currentUser) {
+      toast.error('Cannot remove your own account');
+      return;
+    }
+
+    setUsers(users.filter(user => user.id !== userId));
+    toast.success('User removed successfully');
+  };
+
   return (
     <AuthContext.Provider value={{ 
       isAuthenticated, 
@@ -94,6 +114,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       logout, 
       createUser, 
       changePassword,
+      removeUser,
       users 
     }}>
       {children}
