@@ -38,6 +38,8 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
               onChange={(e) => handleInputChange('Id', e.target.value)}
               className="w-full pr-24"
               placeholder="Enter Quest ID"
+              type="text"
+              readOnly={false}
             />
             <Button 
               variant="outline"
