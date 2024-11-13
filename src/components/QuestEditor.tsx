@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Quest, QuestData } from '@/lib/types';
+import { Quest, QuestData, QuestGiver } from '@/lib/types';
 import QuestList from './QuestList';
 import QuestForm from './QuestForm';
 import QuestGiverEditor from './QuestGiverEditor';
