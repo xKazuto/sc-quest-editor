@@ -18,7 +18,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <label className="text-sm font-medium">Quest ID</label>
         <Input
           type="text"
-          value={quest.Id || ''}
+          value={quest.Id}
           onChange={(e) => handleInputChange('Id', e.target.value)}
           className="mt-1"
         />
@@ -28,7 +28,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <label className="text-sm font-medium">Quest Type</label>
         <Input
           type="number"
-          value={quest.Type || 0}
+          value={quest.Type}
           onChange={(e) => handleInputChange('Type', Number(e.target.value))}
           className="mt-1"
         />
@@ -37,7 +37,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
       <div>
         <label className="text-sm font-medium">Taker ID</label>
         <Input
-          value={quest.TakerId || ''}
+          value={quest.TakerId}
           onChange={(e) => handleInputChange('TakerId', e.target.value)}
           className="mt-1"
         />
@@ -47,7 +47,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <label className="text-sm font-medium">Name</label>
         <Input
           type="text"
-          value={quest.Name || ''}
+          value={quest.Name}
           onChange={(e) => handleInputChange('Name', e.target.value)}
           className="mt-1"
         />
