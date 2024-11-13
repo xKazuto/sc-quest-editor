@@ -20,7 +20,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
     const timestamp = Date.now();
     const randomStr = Math.random().toString(36).substring(2, 7);
     const newId = `QUEST_${timestamp}_${randomStr}`;
-    onChange({ Id: newId });
+    handleInputChange('Id', newId);
     toast({
       title: "Quest ID Generated",
       description: "A new Quest ID has been automatically generated.",
