@@ -14,7 +14,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <label className="text-sm font-medium">Quest ID</label>
         <Input
           type="text"
-          value={quest.Id || ''}
+          value={quest.Id}
           onChange={(e) => onChange({ Id: e.target.value })}
           className="mt-1"
         />
@@ -43,7 +43,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
         <label className="text-sm font-medium">Name</label>
         <Input
           type="text"
-          value={quest.Name || ''}
+          value={quest.Name}
           onChange={(e) => onChange({ Name: e.target.value })}
           className="mt-1"
         />
