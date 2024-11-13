@@ -17,6 +17,12 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     const finalValue = type === 'number' ? (value === '' ? 0 : Number(value)) : value;
+    
+    // For Quest ID, we need to preserve the original ID if the field is empty
+    if (name === 'Id' && !value) {
+      return;
+    }
+    
     onChange({ [name]: finalValue });
   };
 
