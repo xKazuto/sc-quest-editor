@@ -32,6 +32,12 @@ export default {
           text: "#F1F0FB",
           hover: "#2C3344",
           selected: "#403E43",
+          input: {
+            background: "#2C3344",
+            text: "#F1F0FB",
+            placeholder: "#8E9196",
+            border: "#403E43",
+          },
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

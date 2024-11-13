@@ -15,24 +15,24 @@ export const QuestSoundSettings: React.FC<QuestSoundSettingsProps> = ({ quest, o
   return (
     <div className="space-y-4">
       <div>
-        <Label htmlFor="soundAccept" className="text-sm font-medium">Sound Accept</Label>
+        <Label htmlFor="soundAccept" className="text-sm font-medium text-quest-text">Sound Accept</Label>
         <Input
           id="soundAccept"
           value={quest.SoundAccept || defaultSoundAccept}
           onChange={(e) => onChange({ SoundAccept: e.target.value })}
           placeholder={defaultSoundAccept}
-          className="mt-1"
+          className="mt-1 bg-quest-input-background text-quest-input-text placeholder:text-quest-input-placeholder border-quest-input-border focus:border-quest-accent"
         />
       </div>
 
       <div>
-        <Label htmlFor="soundComplete" className="text-sm font-medium">Sound Complete</Label>
+        <Label htmlFor="soundComplete" className="text-sm font-medium text-quest-text">Sound Complete</Label>
         <Input
           id="soundComplete"
           value={quest.SoundComplete || defaultSoundComplete}
           onChange={(e) => onChange({ SoundComplete: e.target.value })}
           placeholder={defaultSoundComplete}
-          className="mt-1"
+          className="mt-1 bg-quest-input-background text-quest-input-text placeholder:text-quest-input-placeholder border-quest-input-border focus:border-quest-accent"
         />
       </div>
     </div>
