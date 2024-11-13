@@ -16,11 +16,13 @@ interface QuestFormProps {
 
 export const QuestForm: React.FC<QuestFormProps> = ({ quest, onChange }) => {
   const updateQuest = (updates: Partial<Quest>) => {
-    onChange({ ...quest, ...updates });
+    const updatedQuest = { ...quest, ...updates };
+    onChange(updatedQuest);
   };
 
   const addGoal = () => {
-    updateQuest({ Goals: [...quest.Goals, createEmptyGoal()] });
+    const updatedGoals = [...quest.Goals, createEmptyGoal()];
+    updateQuest({ Goals: updatedGoals });
   };
 
   const updateGoal = (index: number, updates: Partial<Goal>) => {
@@ -30,11 +32,13 @@ export const QuestForm: React.FC<QuestFormProps> = ({ quest, onChange }) => {
   };
 
   const removeGoal = (index: number) => {
-    updateQuest({ Goals: quest.Goals.filter((_, i) => i !== index) });
+    const updatedGoals = quest.Goals.filter((_, i) => i !== index);
+    updateQuest({ Goals: updatedGoals });
   };
 
   const addReward = () => {
-    updateQuest({ Rewards: [...quest.Rewards, createEmptyReward()] });
+    const updatedRewards = [...quest.Rewards, createEmptyReward()];
+    updateQuest({ Rewards: updatedRewards });
   };
 
   const updateReward = (index: number, updates: Partial<Reward>) => {
@@ -44,7 +48,8 @@ export const QuestForm: React.FC<QuestFormProps> = ({ quest, onChange }) => {
   };
 
   const removeReward = (index: number) => {
-    updateQuest({ Rewards: quest.Rewards.filter((_, i) => i !== index) });
+    const updatedRewards = quest.Rewards.filter((_, i) => i !== index);
+    updateQuest({ Rewards: updatedRewards });
   };
 
   return (
@@ -54,7 +59,7 @@ export const QuestForm: React.FC<QuestFormProps> = ({ quest, onChange }) => {
       <div>
         <label className="text-sm font-medium">Description</label>
         <Textarea
-          value={quest.Description}
+          value={quest.Description ?? ''}
           onChange={(e) => updateQuest({ Description: e.target.value })}
           className="mt-1"
         />
