@@ -20,7 +20,7 @@ const fieldDescriptions: Record<string, string> = {
   value: "Additional value parameter",
   triggerCoordinate: "Coordinates for trigger location",
   triggerRadius: "Radius of trigger area",
-  triggerId: "Identifier for the trigger",
+  triggerId: "Unique Waypoint ID", // Updated description
   triggerEventId: "Event ID for the trigger",
 };
 
