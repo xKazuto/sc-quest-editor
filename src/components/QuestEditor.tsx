@@ -16,7 +16,7 @@ interface QuestEditorProps {
 
 const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
   const [questData, setQuestData] = useState<QuestData>(initialData);
-  const [selectedQuestId, setSelectedQuestId] = useState<string | null>(null);
+  const [selectedQuestId, setSelectedQuestId] = useState<number | null>(null);
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -33,7 +33,7 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
     });
   };
 
-  const handleRemoveQuest = (questId: string) => {
+  const handleRemoveQuest = (questId: number) => {
     setQuestData(prev => ({
       ...prev,
       Quests: prev.Quests.filter(q => q.Id !== questId)
@@ -96,7 +96,10 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
   const handleQuestGiversUpdate = (newQuestGivers: QuestGiver[]) => {
     setQuestData(prev => ({
       ...prev,
-      QuestGivers: newQuestGivers
+      QuestGivers: newQuestGivers.map(qg => ({
+        ...qg,
+        Quests: qg.Quests.map(id => Number(id))
+      }))
     }));
   };
 
