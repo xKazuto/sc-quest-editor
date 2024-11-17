@@ -13,7 +13,7 @@ export const validateQuest = (quest: Partial<Quest>): string[] => {
 export const createEmptyQuest = (): Quest => ({
   Id: '',
   TakerId: '',
-  QType: 1,
+  Type: 1,
   Name: '',
   Description: '',
   Goals: [],
@@ -33,7 +33,7 @@ export const createEmptyQuest = (): Quest => ({
 });
 
 export const createEmptyGoal = (): Goal => ({
-  QType: 1,
+  Type: 1,
   ClassName: '',
   State: false,
   Count: 0,

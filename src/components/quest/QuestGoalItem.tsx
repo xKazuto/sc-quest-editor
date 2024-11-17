@@ -46,9 +46,9 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
         <p className="text-sm text-gray-600 mb-1">{fieldDescriptions.type}</p>
         <Input
           type="number"
-          value={goal.QType}
+          value={goal.Type}
           onChange={(e) => onChange({ Type: Number(e.target.value) })}
-          placeholder="QType"
+          placeholder="Type"
         />
       </div>
 
