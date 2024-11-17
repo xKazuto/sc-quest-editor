@@ -14,14 +14,14 @@ interface QuestGoalItemProps {
 }
 
 const fieldDescriptions: Record<string, string> = {
-  type: "Type of goal (e.g., 1: Kill, 2: Collect)",
+  qtype: "Type of goal (e.g., 1: Kill, 2: Collect)",
   className: "The specific class or identifier of the goal target",
   count: "Required count to complete the goal",
   quantity: "Quantity needed",
   value: "Additional value parameter",
   triggerCoordinate: "Coordinates for trigger location",
   triggerRadius: "Radius of trigger area",
-  triggerId: "Unique Waypoint ID", // Updated description
+  triggerId: "Unique Waypoint ID",
   triggerEventId: "Event ID for the trigger",
   description: "Description shown to the player in the quest log",
 };
@@ -43,11 +43,11 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
   return (
     <div className="space-y-2 pt-4">
       <div>
-        <p className="text-sm text-gray-600 mb-1">{fieldDescriptions.type}</p>
+        <p className="text-sm text-gray-600 mb-1">{fieldDescriptions.qtype}</p>
         <Input
           type="number"
-          value={goal.Type}
-          onChange={(e) => onChange({ Type: Number(e.target.value) })}
+          value={goal.QType}
+          onChange={(e) => onChange({ QType: Number(e.target.value) })}
           placeholder="Type"
         />
       </div>

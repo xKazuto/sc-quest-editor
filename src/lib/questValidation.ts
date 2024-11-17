@@ -33,7 +33,7 @@ export const createEmptyQuest = (): Quest => ({
 });
 
 export const createEmptyGoal = (): Goal => ({
-  Type: 1,
+  QType: 1,
   ClassName: '',
   State: false,
   Count: 0,

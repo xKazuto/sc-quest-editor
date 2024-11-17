@@ -21,7 +21,7 @@ export interface Quest {
 }
 
 export interface Goal {
-  Type: number;
+  QType: number;
   ClassName: string;
   State: boolean;
   Count: number;
