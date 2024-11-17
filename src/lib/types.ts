@@ -1,7 +1,7 @@
 export interface Quest {
   Id: string;
   TakerId: string;
-  Type: number;
+  QType: number;
   Name: string;
   Description: string;
   Goals: Goal[];
