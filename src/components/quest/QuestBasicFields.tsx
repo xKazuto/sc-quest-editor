@@ -66,7 +66,7 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
       <FormItem>
         <Label>Quest Type</Label>
         <Input
-          name="Type"
+          name="QType"
           type="number"
           value={quest.QType ?? 0}
           onChange={handleInputChange}
