@@ -2,9 +2,7 @@ import React from 'react';
 import { Goal } from '@/lib/types';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 
 interface QuestGoalItemProps {
   goal: Goal;
@@ -27,6 +25,14 @@ const fieldDescriptions: Record<string, string> = {
 };
 
 export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onChange, onRemove }) => {
+  const handleQTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newQType = Number(e.target.value);
+    onChange({ 
+      QType: newQType,
+      State: newQType === 1 // Automatically set State based on QType
+    });
+  };
+
   return (
     <div className="space-y-2 pt-4">
       <div>
@@ -34,7 +40,7 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
         <Input
           type="number"
           value={goal.QType}
-          onChange={(e) => onChange({ QType: Number(e.target.value) })}
+          onChange={handleQTypeChange}
           placeholder="QType"
         />
       </div>
@@ -46,17 +52,6 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
           onChange={(e) => onChange({ ClassName: e.target.value })}
           placeholder="Class Name"
         />
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          id={`goal-state-${index}`}
-          checked={goal.State}
-          onCheckedChange={(checked) => 
-            onChange({ State: checked as boolean })
-          }
-        />
-        <label htmlFor={`goal-state-${index}`}>Is Quest done on take?</label>
       </div>
 
       <div>
