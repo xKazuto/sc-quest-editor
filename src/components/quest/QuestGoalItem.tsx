@@ -32,7 +32,7 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
     const qType = parseInt(value);
     onChange({ 
       QType: qType,
-      State: qType === 1 // Automatically set State based on QType
+      State: qType === 1 // Set State to true only for Turn-In (QType 1)
     });
   };
 
