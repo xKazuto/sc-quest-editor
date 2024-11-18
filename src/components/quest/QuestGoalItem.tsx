@@ -30,7 +30,6 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
 
   const handleQTypeChange = (value: string) => {
     const qType = parseInt(value);
-    // First update the QType and State together
     onChange({ 
       QType: qType,
       State: qType === 1 // Set State to true only for Turn-In (QType 1)
@@ -56,6 +55,17 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id={`state-${index}`}
+          checked={goal.State}
+          onCheckedChange={(checked) => 
+            onChange({ State: checked as boolean })
+          }
+        />
+        <label htmlFor={`state-${index}`}>State</label>
       </div>
 
       <div>
