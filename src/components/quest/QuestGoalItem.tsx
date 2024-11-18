@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Select,
   SelectContent,
@@ -19,6 +20,8 @@ interface QuestGoalItemProps {
 }
 
 export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onChange, onRemove }) => {
+  const { toast } = useToast();
+  
   const questTypes = [
     { id: 1, name: "Turn-In" },
     { id: 2, name: "Kill Quest" },
@@ -33,6 +36,17 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
     onChange({ 
       QType: qType,
       State: qType === 1 // Set State to true only for Turn-In (QType 1)
+    });
+  };
+
+  const generateTriggerId = () => {
+    const timestamp = Date.now();
+    const randomStr = Math.random().toString(36).substring(2, 7);
+    const newId = `TRIGGER_${timestamp}_${randomStr}`;
+    onChange({ TriggerId: newId });
+    toast({
+      title: "Trigger ID Generated",
+      description: "A new Trigger ID has been automatically generated.",
     });
   };
 
@@ -127,11 +141,20 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
 
       <div>
         <p className="text-sm text-gray-600 mb-1">Trigger ID</p>
-        <Input
-          value={goal.TriggerId}
-          onChange={(e) => onChange({ TriggerId: e.target.value })}
-          placeholder="Trigger ID"
-        />
+        <div className="flex gap-2">
+          <Input
+            value={goal.TriggerId}
+            onChange={(e) => onChange({ TriggerId: e.target.value })}
+            placeholder="Trigger ID"
+          />
+          <Button 
+            variant="outline"
+            onClick={generateTriggerId}
+            type="button"
+          >
+            Generate
+          </Button>
+        </div>
       </div>
 
       <div>
