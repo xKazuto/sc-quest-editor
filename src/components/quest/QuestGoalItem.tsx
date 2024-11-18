@@ -27,19 +27,6 @@ const fieldDescriptions: Record<string, string> = {
 };
 
 export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onChange, onRemove }) => {
-  const { toast } = useToast();
-
-  const generateRandomWaypointId = () => {
-    const timestamp = Date.now();
-    const randomStr = Math.random().toString(36).substring(2, 7);
-    const newId = `WP_${timestamp}_${randomStr}`;
-    onChange({ TriggerId: newId });
-    toast({
-      title: "Waypoint ID Generated",
-      description: "A new Waypoint ID has been automatically generated.",
-    });
-  };
-
   return (
     <div className="space-y-2 pt-4">
       <div>
@@ -48,7 +35,7 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
           type="number"
           value={goal.QType}
           onChange={(e) => onChange({ QType: Number(e.target.value) })}
-          placeholder="Type"
+          placeholder="QType"
         />
       </div>
 
@@ -130,7 +117,12 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
           />
           <Button 
             variant="outline"
-            onClick={generateRandomWaypointId}
+            onClick={() => {
+              const timestamp = Date.now();
+              const randomStr = Math.random().toString(36).substring(2, 7);
+              const newId = `WP_${timestamp}_${randomStr}`;
+              onChange({ TriggerId: newId });
+            }}
             type="button"
           >
             Generate
