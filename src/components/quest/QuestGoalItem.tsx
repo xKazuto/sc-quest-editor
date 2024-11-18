@@ -2,6 +2,7 @@ import React from 'react';
 import { Goal } from '@/lib/types';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 
 interface QuestGoalItemProps {
