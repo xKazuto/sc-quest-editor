@@ -23,6 +23,17 @@ export const QuestBasicInfo: React.FC<QuestBasicInfoProps> = ({ quest, onChange 
       <QuestBasicFields quest={quest} onChange={onChange} />
       <QuestPrerequisites quest={quest} onChange={onChange} />
 
+      <FormItem className="flex items-center space-x-2">
+        <Checkbox
+          id="eventSendToClient"
+          checked={quest.EventSendToClient}
+          onCheckedChange={() => handleCheckboxChange('EventSendToClient')}
+        />
+        <Label htmlFor="eventSendToClient">
+          Event Send To Client
+        </Label>
+      </FormItem>
+
       {quest.EventSendToClient && (
         <FormItem>
           <Label>Event ID</Label>
