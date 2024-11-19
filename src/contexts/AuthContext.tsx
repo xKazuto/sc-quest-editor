@@ -4,6 +4,11 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { Session, User } from '@supabase/supabase-js';
 
+interface UserProfile {
+  id: string;
+  is_admin: boolean;
+}
+
 interface AuthContextType {
   isAuthenticated: boolean;
   currentUser: string | null;
@@ -11,6 +16,9 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   session: Session | null;
+  users: UserProfile[];
+  createUser: (email: string, password: string) => Promise<void>;
+  changePassword: (userId: string, newPassword: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -20,7 +28,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [users, setUsers] = useState<UserProfile[]>([]);
   const navigate = useNavigate();
+
+  const fetchUsers = async () => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id, is_admin');
+    
+    if (error) {
+      toast.error('Failed to fetch users');
+      return;
+    }
+    
+    setUsers(data || []);
+  };
 
   useEffect(() => {
     // Set up initial session
@@ -59,6 +81,39 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       .single();
     
     setIsAdmin(!!profile?.is_admin);
+    fetchUsers(); // Fetch users when admin status is checked
+  };
+
+  const createUser = async (email: string, password: string) => {
+    try {
+      const { error } = await supabase.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true
+      });
+
+      if (error) throw error;
+      
+      await fetchUsers();
+      toast.success('User created successfully');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to create user');
+    }
+  };
+
+  const changePassword = async (userId: string, newPassword: string) => {
+    try {
+      const { error } = await supabase.auth.admin.updateUserById(
+        userId,
+        { password: newPassword }
+      );
+
+      if (error) throw error;
+      
+      toast.success('Password changed successfully');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to change password');
+    }
   };
 
   const login = async (email: string, password: string) => {
@@ -96,7 +151,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       isAdmin, 
       login, 
       logout,
-      session
+      session,
+      users,
+      createUser,
+      changePassword
     }}>
       {children}
     </AuthContext.Provider>

@@ -41,7 +41,8 @@ const UserManagement = () => {
             <form onSubmit={handleCreateUser} className="space-y-4">
               <div>
                 <Input
-                  placeholder="User ID"
+                  type="email"
+                  placeholder="Email"
                   value={newUserId}
                   onChange={(e) => setNewUserId(e.target.value)}
                   required
@@ -113,7 +114,7 @@ const UserManagement = () => {
                   <div key={user.id} className="p-2 border rounded flex justify-between items-center">
                     <span>{user.id}</span>
                     <span className="text-sm text-muted-foreground">
-                      {user.isAdmin ? 'Admin' : 'User'}
+                      {user.is_admin ? 'Admin' : 'User'}
                     </span>
                   </div>
                 ))}
