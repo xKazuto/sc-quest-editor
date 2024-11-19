@@ -161,10 +161,10 @@ const QuestGiverEditor: React.FC<QuestGiverEditorProps> = ({ questGivers, onUpda
                 <h4 className="text-sm font-medium mb-2">Assigned Quests</h4>
                 <div className="space-y-2">
                   {giver.Quests.map((questId) => (
-                    <div key={questId} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                      <span>{questId}</span>
+                    <div key={questId} className="flex justify-between items-center p-2 bg-quest-input-background rounded">
+                      <span className="text-quest-text">{questId}</span>
                       <Button
-                        variant="ghost"
+                        variant="secondary"
                         size="sm"
                         onClick={() => handleRemoveQuestFromGiver(giver.Id, questId)}
                       >
