@@ -1,18 +1,31 @@
 import { Goal } from '@/lib/types';
 
+const createDefaultGoal = (): Omit<Goal, 'QType' | 'Description'> => ({
+  ClassName: '',
+  State: false,
+  Value: '',
+  TriggerCoordinate: '',
+  TriggerRadius: 0,
+  TriggerId: '',
+  TriggerEventId: '',
+  TriggerSendToClient: false,
+  KeepItem: false,
+});
+
 export const cleanGoalData = (goal: Goal): Goal => {
-  // Start with only the essential properties that are always needed
+  // Start with default values for all required properties
   const baseGoal = {
+    ...createDefaultGoal(),
     QType: goal.QType,
     Description: goal.Description,
   };
 
   // Only add TriggerEventId and TriggerSendToClient if they are actually set
   if (goal.TriggerEventId) {
-    Object.assign(baseGoal, { TriggerEventId: goal.TriggerEventId });
+    baseGoal.TriggerEventId = goal.TriggerEventId;
   }
   if (goal.TriggerSendToClient) {
-    Object.assign(baseGoal, { TriggerSendToClient: goal.TriggerSendToClient });
+    baseGoal.TriggerSendToClient = goal.TriggerSendToClient;
   }
 
   // Add type-specific properties only if they are used
