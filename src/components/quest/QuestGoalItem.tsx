@@ -18,18 +18,17 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({
   onChange, 
   onRemove 
 }) => {
-  const handleQTypeChange = (value: string) => {
-    const qType = parseInt(value);
+  const handleQTypeChange = (value: number) => {
     onChange({ 
-      QType: qType,
-      State: qType === 1 // Set State to true only for Turn-In (QType 1)
+      QType: value,
+      State: value === 1 // Set State to true only for Turn-In (QType 1)
     });
   };
 
   return (
     <div className="space-y-2 pt-4">
       <QuestTypeSelector
-        value={goal.QType.toString()}
+        value={goal.QType}
         onValueChange={handleQTypeChange}
       />
 
