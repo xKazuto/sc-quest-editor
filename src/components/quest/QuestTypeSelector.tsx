@@ -1,15 +1,11 @@
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import React from 'react';
 import { Upload, Skull, Compass, ShoppingCart } from "lucide-react";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { cn } from "@/lib/utils";
 
 interface QuestTypeSelectorProps {
-  value: string;
-  onValueChange: (value: string) => void;
+  value: number;
+  onValueChange: (value: number) => void;
 }
 
 const questTypes = [
@@ -24,35 +20,28 @@ export const QuestTypeSelector: React.FC<QuestTypeSelectorProps> = ({
   onValueChange
 }) => {
   return (
-    <div>
-      <p className="text-sm text-gray-600 mb-1">Quest Type</p>
-      <Select
-        value={value}
-        onValueChange={onValueChange}
-      >
-        <SelectTrigger>
-          <SelectValue placeholder="Select quest type">
-            {questTypes.find(type => type.id.toString() === value)?.name}
-          </SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          {questTypes.map((type) => {
-            const Icon = type.icon;
-            return (
-              <SelectItem 
-                key={type.id} 
-                value={type.id.toString()}
-                className="flex items-center gap-2"
-              >
-                <div className="flex items-center gap-2">
-                  <Icon className="h-4 w-4" />
-                  <span>{type.name}</span>
-                </div>
-              </SelectItem>
-            );
-          })}
-        </SelectContent>
-      </Select>
-    </div>
+    <ToggleGroup 
+      type="single" 
+      value={value.toString()}
+      onValueChange={(val) => val && onValueChange(parseInt(val))}
+      className="flex justify-start space-x-2"
+    >
+      {questTypes.map((type) => {
+        const Icon = type.icon;
+        return (
+          <ToggleGroupItem
+            key={type.id}
+            value={type.id.toString()}
+            aria-label={type.name}
+            className={cn(
+              "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+              "h-10 w-10 p-2"
+            )}
+          >
+            <Icon className="h-full w-full" />
+          </ToggleGroupItem>
+        );
+      })}
+    </ToggleGroup>
   );
 };
