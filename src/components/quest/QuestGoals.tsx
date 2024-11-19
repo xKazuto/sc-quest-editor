@@ -50,7 +50,6 @@ export const QuestGoals: React.FC<QuestGoalsProps> = ({ goals, onChange }) => {
           <CollapsibleContent className="space-y-4 mt-4">
             <QuestGoalItem
               goal={goal}
-              index={index}
               onChange={(updates) => updateGoal(index, updates)}
               onRemove={() => removeGoal(index)}
             />
