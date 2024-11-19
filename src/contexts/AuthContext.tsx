@@ -7,6 +7,7 @@ import { Session, User } from '@supabase/supabase-js';
 interface UserProfile {
   id: string;
   is_admin: boolean;
+  email?: string | null;
 }
 
 interface AuthContextType {
@@ -41,7 +42,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    // Get user emails from auth.users through the admin API
     const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers();
     
     if (authError) {

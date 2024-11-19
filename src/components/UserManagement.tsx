@@ -78,7 +78,7 @@ const UserManagement = () => {
                 <SelectContent>
                   {users.map(user => (
                     <SelectItem key={user.id} value={user.id}>
-                      {user.id}
+                      {user.email || user.id}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -110,7 +110,7 @@ const UserManagement = () => {
               <div className="space-y-2">
                 {users.map(user => (
                   <div key={user.id} className="p-2 border rounded flex justify-between items-center">
-                    <span>{user.email}</span>
+                    <span>{user.email || user.id}</span>
                     <span className="text-sm text-muted-foreground">
                       {user.is_admin ? 'Admin' : 'User'}
                     </span>
