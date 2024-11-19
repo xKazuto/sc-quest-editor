@@ -7,6 +7,7 @@ import { Session, User } from '@supabase/supabase-js';
 interface UserProfile {
   id: string;
   is_admin: boolean;
+  username: string;
   email?: string | null;
 }
 
@@ -14,11 +15,11 @@ interface AuthContextType {
   isAuthenticated: boolean;
   currentUser: string | null;
   isAdmin: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   session: Session | null;
   users: UserProfile[];
-  createUser: (email: string, password: string) => Promise<void>;
+  createUser: (username: string, password: string) => Promise<void>;
   changePassword: (userId: string, newPassword: string) => Promise<void>;
 }
 
@@ -35,50 +36,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchUsers = async () => {
     const { data: profiles, error } = await supabase
       .from('profiles')
-      .select('id, is_admin');
+      .select('id, is_admin, username');
     
     if (error) {
       toast.error('Failed to fetch users');
       return;
     }
 
-    const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers();
-    
-    if (authError) {
-      toast.error('Failed to fetch user details');
-      return;
-    }
-
-    if (profiles && authUsers?.users) {
-      const combinedUsers = profiles.map(profile => ({
+    if (profiles) {
+      const userProfiles: UserProfile[] = profiles.map(profile => ({
         id: profile.id,
         is_admin: profile.is_admin || false,
-        email: authUsers.users.find(u => u.id === profile.id)?.email
+        username: profile.username
       }));
-      
-      setUsers(combinedUsers);
+      setUsers(userProfiles);
     }
   };
 
   useEffect(() => {
-    // Set up initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setIsAuthenticated(!!session);
       if (session?.user) {
-        setCurrentUser(session.user.email);
+        setCurrentUser(session.user.user_metadata.username);
         checkAdminStatus(session.user);
       }
     });
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
       setIsAuthenticated(!!session);
       if (session?.user) {
-        setCurrentUser(session.user.email);
+        setCurrentUser(session.user.user_metadata.username);
         await checkAdminStatus(session.user);
       } else {
         setCurrentUser(null);
@@ -97,15 +88,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       .single();
     
     setIsAdmin(!!profile?.is_admin);
-    fetchUsers(); // Fetch users when admin status is checked
+    fetchUsers();
   };
 
-  const createUser = async (email: string, password: string) => {
+  const createUser = async (username: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.admin.createUser({
-        email,
+      // First check if username exists
+      const { data: existingUser } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('username', username)
+        .single();
+
+      if (existingUser) {
+        throw new Error('Username already exists');
+      }
+
+      const { data, error } = await supabase.auth.signUp({
+        email: `${username}@temp.com`,
         password,
-        email_confirm: true
+        options: {
+          data: {
+            username
+          }
+        }
       });
 
       if (error) throw error;
@@ -136,10 +142,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (username: string, password: string) => {
     try {
+      // First get the user's email from the profiles table
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('username', username)
+        .single();
+
+      if (profileError || !profile) {
+        throw new Error('Invalid username or password');
+      }
+
       const { error } = await supabase.auth.signInWithPassword({
-        email,
+        email: `${username}@temp.com`,
         password,
       });
 

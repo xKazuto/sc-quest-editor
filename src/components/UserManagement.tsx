@@ -8,16 +8,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 const UserManagement = () => {
   const { createUser, changePassword, users, isAdmin, session } = useAuth();
-  const [newUserId, setNewUserId] = useState('');
+  const [newUsername, setNewUsername] = useState('');
   const [newUserPassword, setNewUserPassword] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newUserId && newUserPassword) {
-      await createUser(newUserId, newUserPassword);
-      setNewUserId('');
+    if (newUsername && newUserPassword) {
+      await createUser(newUsername, newUserPassword);
+      setNewUsername('');
       setNewUserPassword('');
     }
   };
@@ -42,10 +42,10 @@ const UserManagement = () => {
             <form onSubmit={handleCreateUser} className="space-y-4">
               <div>
                 <Input
-                  type="email"
-                  placeholder="Email"
-                  value={newUserId}
-                  onChange={(e) => setNewUserId(e.target.value)}
+                  type="text"
+                  placeholder="Username"
+                  value={newUsername}
+                  onChange={(e) => setNewUsername(e.target.value)}
                   required
                 />
               </div>
@@ -78,7 +78,7 @@ const UserManagement = () => {
                 <SelectContent>
                   {users.map(user => (
                     <SelectItem key={user.id} value={user.id}>
-                      {user.email || user.id}
+                      {user.username}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -110,7 +110,7 @@ const UserManagement = () => {
               <div className="space-y-2">
                 {users.map(user => (
                   <div key={user.id} className="p-2 border rounded flex justify-between items-center">
-                    <span>{user.email || user.id}</span>
+                    <span>{user.username}</span>
                     <span className="text-sm text-muted-foreground">
                       {user.is_admin ? 'Admin' : 'User'}
                     </span>
