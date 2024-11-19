@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from '@/integrations/supabase/client';
 
 export const createAdminUser = async () => {
   try {
@@ -14,8 +14,8 @@ export const createAdminUser = async () => {
       return;
     }
 
-    // Create the admin user
-    const { data, error } = await supabase.auth.signUp({
+    // Create the auth user
+    const { data: authData, error: signUpError } = await supabase.auth.signUp({
       email: 'admin@temp.com',
       password: 'xK9#mP2$vL5',
       options: {
@@ -25,23 +25,24 @@ export const createAdminUser = async () => {
       }
     });
 
-    if (error) throw error;
+    if (signUpError) throw signUpError;
 
-    // Set the user as admin in the profiles table
-    if (data.user) {
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({ is_admin: true })
-        .eq('id', data.user.id);
-
-      if (updateError) throw updateError;
+    if (!authData.user) {
+      throw new Error('Failed to create admin user');
     }
 
+    // Update the profile to set admin privileges
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({ is_admin: true })
+      .eq('id', authData.user.id);
+
+    if (updateError) throw updateError;
+
     console.log('Admin user created successfully');
+    return authData;
   } catch (error) {
     console.error('Error creating admin user:', error);
+    throw error;
   }
 };
-
-// Run the setup
-createAdminUser();
