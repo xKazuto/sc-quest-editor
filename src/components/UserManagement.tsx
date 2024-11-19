@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const UserManagement = () => {
   const { createUser, changePassword, users, isAdmin, currentUser } = useAuth();
@@ -12,19 +13,19 @@ const UserManagement = () => {
   const [selectedUser, setSelectedUser] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
-  const handleCreateUser = (e: React.FormEvent) => {
+  const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newUserId && newUserPassword) {
-      createUser(newUserId, newUserPassword);
+      await createUser(newUserId, newUserPassword);
       setNewUserId('');
       setNewUserPassword('');
     }
   };
 
-  const handleChangePassword = (e: React.FormEvent) => {
+  const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedUser && newPassword) {
-      changePassword(selectedUser, newPassword);
+      await changePassword(selectedUser, newPassword);
       setSelectedUser('');
       setNewPassword('');
     }
@@ -70,21 +71,18 @@ const UserManagement = () => {
         <CardContent>
           <form onSubmit={handleChangePassword} className="space-y-4">
             {isAdmin ? (
-              <div>
-                <select
-                  className="w-full p-2 border rounded"
-                  value={selectedUser}
-                  onChange={(e) => setSelectedUser(e.target.value)}
-                  required
-                >
-                  <option value="">Select User</option>
+              <Select value={selectedUser} onValueChange={setSelectedUser}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select User" />
+                </SelectTrigger>
+                <SelectContent>
                   {users.map(user => (
-                    <option key={user.id} value={user.id}>
+                    <SelectItem key={user.id} value={user.id}>
                       {user.id}
-                    </option>
+                    </SelectItem>
                   ))}
-                </select>
-              </div>
+                </SelectContent>
+              </Select>
             ) : (
               <input type="hidden" value={currentUser || ''} />
             )}

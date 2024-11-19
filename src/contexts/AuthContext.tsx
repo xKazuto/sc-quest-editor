@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   const fetchUsers = async () => {
-    const { data, error } = await supabase
+    const { data: profiles, error } = await supabase
       .from('profiles')
       .select('id, is_admin');
     
@@ -40,8 +40,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       toast.error('Failed to fetch users');
       return;
     }
+
+    // Get user emails from auth.users through the admin API
+    const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers();
     
-    setUsers(data || []);
+    if (authError) {
+      toast.error('Failed to fetch user details');
+      return;
+    }
+
+    // Combine profile data with auth user data
+    const combinedUsers = profiles.map(profile => {
+      const authUser = authUsers.users.find(u => u.id === profile.id);
+      return {
+        ...profile,
+        email: authUser?.email
+      };
+    });
+    
+    setUsers(combinedUsers || []);
   };
 
   useEffect(() => {
@@ -86,7 +103,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const createUser = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.admin.createUser({
+      const { data, error } = await supabase.auth.admin.createUser({
         email,
         password,
         email_confirm: true
