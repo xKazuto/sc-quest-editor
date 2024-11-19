@@ -1,18 +1,15 @@
+import React from 'react';
 import { Goal } from '@/lib/types';
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
-import { NumberInputWithToggle } from './NumberInputWithToggle';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-interface QuestGoalItemProps {
-  goal: Goal;
-  index: number;
-  onChange: (updates: Partial<Goal>) => void;
-  onRemove: () => void;
-}
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { TurnInGoal } from './goals/TurnInGoal';
+import { KillGoal } from './goals/KillGoal';
+import { ExplorationGoal } from './goals/ExplorationGoal';
+import { FetchGoal } from './goals/FetchGoal';
+import { cleanGoalData } from '@/lib/questGoalUtils';
 
 const QUEST_TYPES = [
   { value: 1, label: "Turn-In" },
@@ -21,125 +18,52 @@ const QUEST_TYPES = [
   { value: 4, label: "Fetch/Bring Quest" },
 ];
 
-export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({
-  goal,
-  onChange,
-}) => {
-  const { toast } = useToast();
+interface QuestGoalItemProps {
+  goal: Goal;
+  onChange: (updates: Partial<Goal>) => void;
+}
 
-  const generateTriggerId = () => {
-    const timestamp = Date.now();
-    const randomStr = Math.random().toString(36).substring(2, 7);
-    const newId = `TRIGGER_${timestamp}_${randomStr}`;
-    onChange({ TriggerId: newId });
-    toast({
-      title: "Trigger ID Generated",
-      description: "A new Trigger ID has been automatically generated.",
-    });
+export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, onChange }) => {
+  const handleChange = (updates: Partial<Goal>) => {
+    const updatedGoal = { ...goal, ...updates };
+    onChange(cleanGoalData(updatedGoal));
   };
 
-  const renderQuestTypeSpecificFields = () => {
+  const renderGoalTypeContent = () => {
     switch (goal.QType) {
-      case 1: // Turn-In
+      case 1:
         return (
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="state"
-                checked={goal.State}
-                onCheckedChange={(checked) => onChange({ State: !!checked })}
-              />
-              <label htmlFor="state">State</label>
-            </div>
-          </div>
+          <TurnInGoal
+            state={goal.State}
+            onChange={handleChange}
+          />
         );
-
-      case 2: // Kill Quest
+      case 2:
         return (
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium">Class Name</label>
-              <Input
-                value={goal.ClassName}
-                onChange={(e) => onChange({ ClassName: e.target.value })}
-                placeholder="Class Name"
-              />
-            </div>
-            <NumberInputWithToggle
-              label="Count"
-              description="Count"
-              value={goal.Count ?? 0}
-              enabled={goal.Count !== undefined}
-              onValueChange={(value) => onChange({ Count: value })}
-              onToggle={(enabled) => onChange({ Count: enabled ? 0 : undefined })}
-            />
-          </div>
+          <KillGoal
+            className={goal.ClassName}
+            count={goal.Count}
+            onChange={handleChange}
+          />
         );
-
-      case 3: // Exploration Quest
+      case 3:
         return (
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium">Trigger Coordinate</label>
-              <Input
-                value={goal.TriggerCoordinate}
-                onChange={(e) => onChange({ TriggerCoordinate: e.target.value })}
-                placeholder="Trigger Coordinate"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium">Trigger Radius</label>
-              <Input
-                type="number"
-                value={goal.TriggerRadius}
-                onChange={(e) => onChange({ TriggerRadius: Number(e.target.value) })}
-                placeholder="Trigger Radius"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium">Trigger ID</label>
-              <div className="flex gap-2">
-                <Input
-                  value={goal.TriggerId}
-                  onChange={(e) => onChange({ TriggerId: e.target.value })}
-                  placeholder="Trigger ID"
-                />
-                <Button onClick={generateTriggerId}>Generate</Button>
-              </div>
-            </div>
-          </div>
+          <ExplorationGoal
+            triggerCoordinate={goal.TriggerCoordinate}
+            triggerRadius={goal.TriggerRadius}
+            triggerId={goal.TriggerId}
+            onChange={handleChange}
+          />
         );
-
-      case 4: // Fetch/Bring Quest
+      case 4:
         return (
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium">Class Name</label>
-              <Input
-                value={goal.ClassName}
-                onChange={(e) => onChange({ ClassName: e.target.value })}
-                placeholder="Class Name"
-              />
-            </div>
-            <NumberInputWithToggle
-              label="Count"
-              description="Count"
-              value={goal.Count ?? 0}
-              enabled={goal.Count !== undefined}
-              onValueChange={(value) => onChange({ Count: value })}
-              onToggle={(enabled) => onChange({ Count: enabled ? 0 : undefined })}
-            />
-            <NumberInputWithToggle
-              label="Quantity"
-              description="Quantity"
-              value={goal.Quantity ?? 0}
-              enabled={goal.Quantity !== undefined}
-              onValueChange={(value) => onChange({ Quantity: value })}
-              onToggle={(enabled) => onChange({ Quantity: enabled ? 0 : undefined })}
-            />
-          </div>
+          <FetchGoal
+            className={goal.ClassName}
+            count={goal.Count}
+            quantity={goal.Quantity}
+            onChange={handleChange}
+          />
         );
-
       default:
         return null;
     }
@@ -148,10 +72,10 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({
   return (
     <div className="space-y-4">
       <div>
-        <label className="text-sm font-medium">Quest Type</label>
+        <Label>Quest Type</Label>
         <Select
           value={goal.QType.toString()}
-          onValueChange={(value) => onChange({ QType: parseInt(value) })}
+          onValueChange={(value) => handleChange({ QType: parseInt(value) })}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select quest type" />
@@ -166,27 +90,27 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({
         </Select>
       </div>
 
-      {renderQuestTypeSpecificFields()}
+      {renderGoalTypeContent()}
 
       <div>
-        <label className="text-sm font-medium">Description</label>
+        <Label>Description</Label>
         <Textarea
           value={goal.Description}
-          onChange={(e) => onChange({ Description: e.target.value })}
+          onChange={(e) => handleChange({ Description: e.target.value })}
           placeholder="Description"
         />
       </div>
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium">Optional Settings</label>
+          <Label>Optional Settings</Label>
         </div>
         <div className="space-y-2">
           <div>
-            <label className="text-sm font-medium">Trigger Event ID</label>
+            <Label>Trigger Event ID</Label>
             <Input
               value={goal.TriggerEventId}
-              onChange={(e) => onChange({ TriggerEventId: e.target.value })}
+              onChange={(e) => handleChange({ TriggerEventId: e.target.value })}
               placeholder="Trigger Event ID"
             />
           </div>
@@ -194,9 +118,9 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({
             <Checkbox
               id="triggerSendToClient"
               checked={goal.TriggerSendToClient}
-              onCheckedChange={(checked) => onChange({ TriggerSendToClient: !!checked })}
+              onCheckedChange={(checked) => handleChange({ TriggerSendToClient: !!checked })}
             />
-            <label htmlFor="triggerSendToClient">Trigger Send To Client</label>
+            <Label htmlFor="triggerSendToClient">Trigger Send To Client</Label>
           </div>
         </div>
       </div>
