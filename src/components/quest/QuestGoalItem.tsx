@@ -21,9 +21,10 @@ const QUEST_TYPES = [
 interface QuestGoalItemProps {
   goal: Goal;
   onChange: (updates: Partial<Goal>) => void;
+  onRemove: () => void;
 }
 
-export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, onChange }) => {
+export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, onChange, onRemove }) => {
   const handleChange = (updates: Partial<Goal>) => {
     const updatedGoal = { ...goal, ...updates };
     onChange(cleanGoalData(updatedGoal));
