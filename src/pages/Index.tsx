@@ -1,10 +1,8 @@
 import React from 'react';
 import QuestEditor from '@/components/QuestEditor';
-import UserManagement from '@/components/UserManagement';
 import { QuestData } from '@/lib/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
   const { logout } = useAuth();
@@ -36,21 +34,10 @@ const Index = () => {
         </Button>
       </div>
       <div className="container mx-auto p-4">
-        <Tabs defaultValue="quests">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="quests">Quest Editor</TabsTrigger>
-            <TabsTrigger value="users">User Management</TabsTrigger>
-          </TabsList>
-          <TabsContent value="quests">
-            <QuestEditor
-              initialData={initialData}
-              onSave={handleSave}
-            />
-          </TabsContent>
-          <TabsContent value="users">
-            <UserManagement />
-          </TabsContent>
-        </Tabs>
+        <QuestEditor
+          initialData={initialData}
+          onSave={handleSave}
+        />
       </div>
     </div>
   );
