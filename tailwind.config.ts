@@ -25,9 +25,9 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         quest: {
-          primary: "#4A148C",
-          secondary: "#7B1FA2",
-          accent: "#FFD700",
+          primary: "#6E59A5",
+          secondary: "#7E69AB",
+          accent: "#D6BCFA",
           background: "#1A1F2C",
           text: "#F1F0FB",
           hover: "#2C3344",
@@ -35,7 +35,7 @@ export default {
           input: {
             background: "#2C3344",
             text: "#F1F0FB",
-            placeholder: "#8E9196",
+            placeholder: "#9F9EA1",
             border: "#403E43",
           },
         },
