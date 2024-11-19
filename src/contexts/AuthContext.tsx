@@ -49,16 +49,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    // Combine profile data with auth user data
-    const combinedUsers = profiles.map(profile => {
-      const authUser = authUsers.users.find(u => u.id === profile.id);
-      return {
-        ...profile,
-        email: authUser?.email
-      };
-    });
-    
-    setUsers(combinedUsers || []);
+    if (profiles && authUsers?.users) {
+      const combinedUsers = profiles.map(profile => ({
+        id: profile.id,
+        is_admin: profile.is_admin || false,
+        email: authUsers.users.find(u => u.id === profile.id)?.email
+      }));
+      
+      setUsers(combinedUsers);
+    }
   };
 
   useEffect(() => {
@@ -120,6 +119,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const changePassword = async (userId: string, newPassword: string) => {
     try {
+      if (!isAdmin && userId !== session?.user?.id) {
+        throw new Error('Unauthorized to change password');
+      }
+
       const { error } = await supabase.auth.admin.updateUserById(
         userId,
         { password: newPassword }

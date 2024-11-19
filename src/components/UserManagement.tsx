@@ -7,7 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const UserManagement = () => {
-  const { createUser, changePassword, users, isAdmin, currentUser } = useAuth();
+  const { createUser, changePassword, users, isAdmin, session } = useAuth();
   const [newUserId, setNewUserId] = useState('');
   const [newUserPassword, setNewUserPassword] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
@@ -84,7 +84,7 @@ const UserManagement = () => {
                 </SelectContent>
               </Select>
             ) : (
-              <input type="hidden" value={currentUser || ''} />
+              <input type="hidden" value={session?.user?.id || ''} />
             )}
             <div>
               <Input
@@ -110,7 +110,7 @@ const UserManagement = () => {
               <div className="space-y-2">
                 {users.map(user => (
                   <div key={user.id} className="p-2 border rounded flex justify-between items-center">
-                    <span>{user.id}</span>
+                    <span>{user.email}</span>
                     <span className="text-sm text-muted-foreground">
                       {user.is_admin ? 'Admin' : 'User'}
                     </span>
