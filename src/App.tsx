@@ -11,45 +11,50 @@ import Login from "./pages/Login";
 
 const queryClient = new QueryClient();
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
-  }
-  return <>{children}</>;
-};
-
-const AppRoutes = () => (
-  <Routes>
-    <Route path="/login" element={<Login />} />
-    <Route
-      path="/"
-      element={
-        <ProtectedRoute>
-          <Index />
-        </ProtectedRoute>
-      }
-    />
-  </Routes>
-);
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <TooltipProvider>
         <BrowserRouter>
           <AuthProvider>
-            <div className="fixed top-4 left-4 z-50">
-              <DarkModeToggle />
-            </div>
-            <Toaster />
-            <Sonner />
-            <AppRoutes />
+            <AppContent />
           </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
 );
+
+// Move ProtectedRoute and AppRoutes inside a new component that's rendered within AuthProvider
+const AppContent = () => {
+  const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+    const { isAuthenticated } = useAuth();
+    if (!isAuthenticated) {
+      return <Navigate to="/login" />;
+    }
+    return <>{children}</>;
+  };
+
+  return (
+    <>
+      <div className="fixed top-4 left-4 z-50">
+        <DarkModeToggle />
+      </div>
+      <Toaster />
+      <Sonner />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Index />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </>
+  );
+};
 
 export default App;
