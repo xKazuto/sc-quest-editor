@@ -1,9 +1,9 @@
 import { Goal } from '@/lib/types';
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
+import { NumberInputWithToggle } from './NumberInputWithToggle';
 import {
   Select,
   SelectContent,
@@ -19,7 +19,7 @@ interface QuestGoalItemProps {
   onRemove: () => void;
 }
 
-export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onChange, onRemove }) => {
+export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onChange }) => {
   const { toast } = useToast();
   
   const questTypes = [
@@ -35,7 +35,7 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
     const qType = parseInt(value);
     onChange({ 
       QType: qType,
-      State: qType === 1 // Set State to true only for Turn-In (QType 1)
+      State: qType === 1 
     });
   };
 
@@ -91,25 +91,23 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, index, onCha
         />
       </div>
 
-      <div>
-        <p className="text-sm text-gray-600 mb-1">Count</p>
-        <Input
-          type="number"
-          value={goal.Count}
-          onChange={(e) => onChange({ Count: Number(e.target.value) })}
-          placeholder="Count"
-        />
-      </div>
+      <NumberInputWithToggle
+        label="Count"
+        description="Count"
+        value={goal.Count ?? 0}
+        enabled={goal.Count !== undefined}
+        onValueChange={(value) => onChange({ Count: value })}
+        onToggle={(enabled) => onChange({ Count: enabled ? 0 : undefined })}
+      />
 
-      <div>
-        <p className="text-sm text-gray-600 mb-1">Quantity</p>
-        <Input
-          type="number"
-          value={goal.Quantity}
-          onChange={(e) => onChange({ Quantity: Number(e.target.value) })}
-          placeholder="Quantity"
-        />
-      </div>
+      <NumberInputWithToggle
+        label="Quantity"
+        description="Quantity"
+        value={goal.Quantity ?? 0}
+        enabled={goal.Quantity !== undefined}
+        onValueChange={(value) => onChange({ Quantity: value })}
+        onToggle={(enabled) => onChange({ Quantity: enabled ? 0 : undefined })}
+      />
 
       <div>
         <p className="text-sm text-gray-600 mb-1">Value</p>

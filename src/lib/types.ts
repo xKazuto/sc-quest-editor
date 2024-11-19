@@ -24,8 +24,8 @@ export interface Goal {
   QType: number;
   ClassName: string;
   State: boolean;
-  Count: number;
-  Quantity: number;
+  Count?: number;
+  Quantity?: number;
   Value: string;
   TriggerCoordinate: string;
   TriggerRadius: number;
@@ -39,8 +39,8 @@ export interface Goal {
 export interface Reward {
   RewardType: number;
   ClassName: string;
-  Amount: number;
-  Quantity: number;
+  Amount?: number;
+  Quantity?: number;
 }
 
 export interface QuestGiver {

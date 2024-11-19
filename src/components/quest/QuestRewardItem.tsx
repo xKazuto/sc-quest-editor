@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronRight } from "lucide-react";
+import { NumberInputWithToggle } from './NumberInputWithToggle';
 
 interface QuestRewardItemProps {
   reward: Reward;
@@ -58,29 +59,23 @@ export const QuestRewardItem: React.FC<QuestRewardItemProps> = ({ reward, index,
             />
           </div>
 
-          <div>
-            <p className="text-sm text-gray-600 mb-1">{fieldDescriptions.amount}</p>
-            <Input
-              type="number"
-              step="1"
-              value={reward.Amount}
-              onChange={(e) => onChange({ Amount: Math.floor(Number(e.target.value)) })}
-              placeholder="Amount"
-              onWheel={(e) => e.currentTarget.blur()}
-            />
-          </div>
+          <NumberInputWithToggle
+            label="Amount"
+            description={fieldDescriptions.amount}
+            value={reward.Amount ?? 0}
+            enabled={reward.Amount !== undefined}
+            onValueChange={(value) => onChange({ Amount: value })}
+            onToggle={(enabled) => onChange({ Amount: enabled ? 0 : undefined })}
+          />
 
-          <div>
-            <p className="text-sm text-gray-600 mb-1">{fieldDescriptions.quantity}</p>
-            <Input
-              type="number"
-              step="1"
-              value={reward.Quantity}
-              onChange={(e) => onChange({ Quantity: Math.floor(Number(e.target.value)) })}
-              placeholder="Quantity"
-              onWheel={(e) => e.currentTarget.blur()}
-            />
-          </div>
+          <NumberInputWithToggle
+            label="Quantity"
+            description={fieldDescriptions.quantity}
+            value={reward.Quantity ?? 0}
+            enabled={reward.Quantity !== undefined}
+            onValueChange={(value) => onChange({ Quantity: value })}
+            onToggle={(enabled) => onChange({ Quantity: enabled ? 0 : undefined })}
+          />
         </div>
       </CollapsibleContent>
     </Collapsible>
