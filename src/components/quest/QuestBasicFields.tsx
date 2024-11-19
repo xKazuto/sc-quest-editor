@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Label } from "@/components/ui/label";
 import { FormItem } from "@/components/ui/form";
+import { QuestTypeSelector } from './QuestTypeSelector';
 
 interface QuestBasicFieldsProps {
   quest: Quest;
@@ -15,8 +16,8 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
   const { toast } = useToast();
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type } = e.target;
-    const finalValue = type === 'number' ? (value === '' ? 0 : Number(value)) : value;
+    const { name, value } = e.target;
+    const finalValue = value;
     
     // Skip if the value hasn't changed
     if (quest[name as keyof Quest] === finalValue) {
@@ -65,12 +66,9 @@ export const QuestBasicFields: React.FC<QuestBasicFieldsProps> = ({ quest, onCha
 
       <FormItem>
         <Label>Quest Type</Label>
-        <Input
-          name="QType"
-          type="number"
-          value={quest.QType ?? 0}
-          onChange={handleInputChange}
-          placeholder="Enter Quest Type"
+        <QuestTypeSelector
+          value={quest.QType}
+          onValueChange={(value) => onChange({ QType: value })}
         />
       </FormItem>
 
