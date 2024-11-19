@@ -7,7 +7,6 @@ import { QuestBasicFields } from './QuestBasicFields';
 import { QuestPrerequisites } from './QuestPrerequisites';
 import { QuestSoundSettings } from './QuestSoundSettings';
 import { FormItem } from "@/components/ui/form";
-import { QuestTypeSelector } from './QuestTypeSelector';
 
 interface QuestBasicInfoProps {
   quest: Quest;
@@ -23,25 +22,6 @@ export const QuestBasicInfo: React.FC<QuestBasicInfoProps> = ({ quest, onChange 
     <div className="space-y-6">
       <QuestBasicFields quest={quest} onChange={onChange} />
       <QuestPrerequisites quest={quest} onChange={onChange} />
-
-      <FormItem>
-        <Label>Quest Type</Label>
-        <QuestTypeSelector
-          value={quest.QType}
-          onValueChange={(value) => onChange({ QType: value })}
-        />
-      </FormItem>
-
-      <FormItem className="flex items-center space-x-2">
-        <Checkbox
-          id="eventSendToClient"
-          checked={quest.EventSendToClient}
-          onCheckedChange={() => handleCheckboxChange('EventSendToClient')}
-        />
-        <Label htmlFor="eventSendToClient">
-          Event Send To Client
-        </Label>
-      </FormItem>
 
       {quest.EventSendToClient && (
         <FormItem>

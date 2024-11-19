@@ -1,5 +1,5 @@
 import React from 'react';
-import { Upload, Skull, Compass, ShoppingCart } from "lucide-react";
+import { MapPin, Skull, AlertOctagon, Chest } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
 
@@ -9,10 +9,10 @@ interface QuestTypeSelectorProps {
 }
 
 const questTypes = [
-  { id: 1, name: "Turn-In", icon: Upload },
+  { id: 1, name: "Turn-In", icon: Chest },
   { id: 2, name: "Kill Quest", icon: Skull },
-  { id: 3, name: "Exploration Quest", icon: Compass },
-  { id: 4, name: "Trade Quest", icon: ShoppingCart },
+  { id: 3, name: "Exploration Quest", icon: MapPin },
+  { id: 4, name: "Alert Quest", icon: AlertOctagon },
 ];
 
 export const QuestTypeSelector: React.FC<QuestTypeSelectorProps> = ({
