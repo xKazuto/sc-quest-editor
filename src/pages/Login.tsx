@@ -3,45 +3,39 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Navigate } from 'react-router-dom';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const { login, isAuthenticated } = useAuth();
+  const { login } = useAuth();
 
-  if (isAuthenticated) {
-    return <Navigate to="/" />;
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    await login(username, password);
+    login(id, password);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-quest-background">
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#6b6b6b' }}>
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle className="text-quest-text">Login</CardTitle>
+          <CardTitle>Login</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="username" className="text-sm font-medium text-quest-text">
-                Username
+              <label htmlFor="id" className="text-sm font-medium">
+                ID
               </label>
               <Input
-                id="username"
+                id="id"
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={id}
+                onChange={(e) => setId(e.target.value)}
                 required
-                className="bg-quest-input-background text-quest-input-text border-quest-input-border"
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium text-quest-text">
+              <label htmlFor="password" className="text-sm font-medium">
                 Password
               </label>
               <Input
@@ -50,10 +44,9 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="bg-quest-input-background text-quest-input-text border-quest-input-border"
               />
             </div>
-            <Button type="submit" className="w-full bg-quest-primary hover:bg-quest-secondary text-quest-text">
+            <Button type="submit" className="w-full">
               Login
             </Button>
           </form>

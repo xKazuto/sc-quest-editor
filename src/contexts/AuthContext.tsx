@@ -1,184 +1,88 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
-import { Session, User } from '@supabase/supabase-js';
 
-interface UserProfile {
+interface User {
   id: string;
-  is_admin: boolean;
-  username: string;
-  email?: string | null;
+  password: string;
+  isAdmin: boolean;
 }
 
 interface AuthContextType {
   isAuthenticated: boolean;
   currentUser: string | null;
   isAdmin: boolean;
-  login: (username: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-  session: Session | null;
-  users: UserProfile[];
-  createUser: (username: string, password: string) => Promise<void>;
-  changePassword: (userId: string, newPassword: string) => Promise<void>;
+  login: (id: string, password: string) => void;
+  logout: () => void;
+  createUser: (id: string, password: string) => void;
+  changePassword: (userId: string, newPassword: string) => void;
+  users: User[];
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+// Initialize with admin user
+const initialUsers: User[] = [{
+  id: 'admin',
+  password: 'password123',
+  isAdmin: true
+}];
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [session, setSession] = useState<Session | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [users, setUsers] = useState<User[]>(initialUsers);
   const [currentUser, setCurrentUser] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [users, setUsers] = useState<UserProfile[]>([]);
   const navigate = useNavigate();
 
-  const fetchUsers = async () => {
-    const { data: profiles, error } = await supabase
-      .from('profiles')
-      .select('id, is_admin, username');
+  const login = (id: string, password: string) => {
+    const user = users.find(u => u.id === id && u.password === password);
+    if (user) {
+      setIsAuthenticated(true);
+      setCurrentUser(user.id);
+      setIsAdmin(user.isAdmin);
+      navigate('/');
+      toast.success('Successfully logged in');
+    } else {
+      toast.error('Invalid credentials');
+    }
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+    setIsAdmin(false);
+    navigate('/login');
+    toast.success('Successfully logged out');
+  };
+
+  const createUser = (id: string, password: string) => {
+    if (!isAdmin) {
+      toast.error('Only admins can create users');
+      return;
+    }
     
-    if (error) {
-      toast.error('Failed to fetch users');
+    if (users.some(u => u.id === id)) {
+      toast.error('User ID already exists');
       return;
     }
 
-    if (profiles) {
-      const userProfiles: UserProfile[] = profiles.map(profile => ({
-        id: profile.id,
-        is_admin: profile.is_admin || false,
-        username: profile.username
-      }));
-      setUsers(userProfiles);
-    }
+    setUsers([...users, { id, password, isAdmin: false }]);
+    toast.success('User created successfully');
   };
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setIsAuthenticated(!!session);
-      if (session?.user) {
-        setCurrentUser(session.user.user_metadata.username);
-        checkAdminStatus(session.user);
-      }
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session);
-      setIsAuthenticated(!!session);
-      if (session?.user) {
-        setCurrentUser(session.user.user_metadata.username);
-        await checkAdminStatus(session.user);
-      } else {
-        setCurrentUser(null);
-        setIsAdmin(false);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const checkAdminStatus = async (user: User) => {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('is_admin')
-      .eq('id', user.id)
-      .single();
-    
-    setIsAdmin(!!profile?.is_admin);
-    fetchUsers();
-  };
-
-  const createUser = async (username: string, password: string) => {
-    try {
-      // First check if username exists
-      const { data: existingUser } = await supabase
-        .from('profiles')
-        .select('username')
-        .eq('username', username)
-        .single();
-
-      if (existingUser) {
-        throw new Error('Username already exists');
-      }
-
-      const { data, error } = await supabase.auth.signUp({
-        email: `${username}@temp.com`,
-        password,
-        options: {
-          data: {
-            username
-          }
-        }
-      });
-
-      if (error) throw error;
-      
-      await fetchUsers();
-      toast.success('User created successfully');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to create user');
+  const changePassword = (userId: string, newPassword: string) => {
+    if (!isAdmin && currentUser !== userId) {
+      toast.error('You can only change your own password');
+      return;
     }
-  };
 
-  const changePassword = async (userId: string, newPassword: string) => {
-    try {
-      if (!isAdmin && userId !== session?.user?.id) {
-        throw new Error('Unauthorized to change password');
-      }
-
-      const { error } = await supabase.auth.admin.updateUserById(
-        userId,
-        { password: newPassword }
-      );
-
-      if (error) throw error;
-      
-      toast.success('Password changed successfully');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to change password');
-    }
-  };
-
-  const login = async (username: string, password: string) => {
-    try {
-      // First get the user's email from the profiles table
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('username', username)
-        .single();
-
-      if (profileError || !profile) {
-        throw new Error('Invalid username or password');
-      }
-
-      const { error } = await supabase.auth.signInWithPassword({
-        email: `${username}@temp.com`,
-        password,
-      });
-
-      if (error) throw error;
-      
-      navigate('/');
-      toast.success('Successfully logged in');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to login');
-    }
-  };
-
-  const logout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      
-      navigate('/login');
-      toast.success('Successfully logged out');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to logout');
-    }
+    setUsers(users.map(user => 
+      user.id === userId 
+        ? { ...user, password: newPassword }
+        : user
+    ));
+    toast.success('Password changed successfully');
   };
 
   return (
@@ -187,11 +91,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       currentUser, 
       isAdmin, 
       login, 
-      logout,
-      session,
-      users,
-      createUser,
-      changePassword
+      logout, 
+      createUser, 
+      changePassword,
+      users 
     }}>
       {children}
     </AuthContext.Provider>

@@ -4,28 +4,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const UserManagement = () => {
-  const { createUser, changePassword, users, isAdmin, session } = useAuth();
-  const [newUsername, setNewUsername] = useState('');
+  const { createUser, changePassword, users, isAdmin, currentUser } = useAuth();
+  const [newUserId, setNewUserId] = useState('');
   const [newUserPassword, setNewUserPassword] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
-  const handleCreateUser = async (e: React.FormEvent) => {
+  const handleCreateUser = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newUsername && newUserPassword) {
-      await createUser(newUsername, newUserPassword);
-      setNewUsername('');
+    if (newUserId && newUserPassword) {
+      createUser(newUserId, newUserPassword);
+      setNewUserId('');
       setNewUserPassword('');
     }
   };
 
-  const handleChangePassword = async (e: React.FormEvent) => {
+  const handleChangePassword = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedUser && newPassword) {
-      await changePassword(selectedUser, newPassword);
+      changePassword(selectedUser, newPassword);
       setSelectedUser('');
       setNewPassword('');
     }
@@ -42,10 +41,9 @@ const UserManagement = () => {
             <form onSubmit={handleCreateUser} className="space-y-4">
               <div>
                 <Input
-                  type="text"
-                  placeholder="Username"
-                  value={newUsername}
-                  onChange={(e) => setNewUsername(e.target.value)}
+                  placeholder="User ID"
+                  value={newUserId}
+                  onChange={(e) => setNewUserId(e.target.value)}
                   required
                 />
               </div>
@@ -71,20 +69,23 @@ const UserManagement = () => {
         <CardContent>
           <form onSubmit={handleChangePassword} className="space-y-4">
             {isAdmin ? (
-              <Select value={selectedUser} onValueChange={setSelectedUser}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select User" />
-                </SelectTrigger>
-                <SelectContent>
+              <div>
+                <select
+                  className="w-full p-2 border rounded"
+                  value={selectedUser}
+                  onChange={(e) => setSelectedUser(e.target.value)}
+                  required
+                >
+                  <option value="">Select User</option>
                   {users.map(user => (
-                    <SelectItem key={user.id} value={user.id}>
-                      {user.username}
-                    </SelectItem>
+                    <option key={user.id} value={user.id}>
+                      {user.id}
+                    </option>
                   ))}
-                </SelectContent>
-              </Select>
+                </select>
+              </div>
             ) : (
-              <input type="hidden" value={session?.user?.id || ''} />
+              <input type="hidden" value={currentUser || ''} />
             )}
             <div>
               <Input
@@ -110,9 +111,9 @@ const UserManagement = () => {
               <div className="space-y-2">
                 {users.map(user => (
                   <div key={user.id} className="p-2 border rounded flex justify-between items-center">
-                    <span>{user.username}</span>
+                    <span>{user.id}</span>
                     <span className="text-sm text-muted-foreground">
-                      {user.is_admin ? 'Admin' : 'User'}
+                      {user.isAdmin ? 'Admin' : 'User'}
                     </span>
                   </div>
                 ))}
