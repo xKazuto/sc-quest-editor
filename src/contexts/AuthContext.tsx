@@ -1,88 +1,92 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-
-interface User {
-  id: string;
-  password: string;
-  isAdmin: boolean;
-}
+import { supabase } from '@/integrations/supabase/client';
+import { Session, User } from '@supabase/supabase-js';
 
 interface AuthContextType {
   isAuthenticated: boolean;
   currentUser: string | null;
   isAdmin: boolean;
-  login: (id: string, password: string) => void;
-  logout: () => void;
-  createUser: (id: string, password: string) => void;
-  changePassword: (userId: string, newPassword: string) => void;
-  users: User[];
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  session: Session | null;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// Initialize with admin user
-const initialUsers: User[] = [{
-  id: 'admin',
-  password: 'password123',
-  isAdmin: true
-}];
-
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [users, setUsers] = useState<User[]>(initialUsers);
-  const [currentUser, setCurrentUser] = useState<string | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
-  const login = (id: string, password: string) => {
-    const user = users.find(u => u.id === id && u.password === password);
-    if (user) {
-      setIsAuthenticated(true);
-      setCurrentUser(user.id);
-      setIsAdmin(user.isAdmin);
+  useEffect(() => {
+    // Set up initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setIsAuthenticated(!!session);
+      if (session?.user) {
+        setCurrentUser(session.user.email);
+        checkAdminStatus(session.user);
+      }
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      setSession(session);
+      setIsAuthenticated(!!session);
+      if (session?.user) {
+        setCurrentUser(session.user.email);
+        await checkAdminStatus(session.user);
+      } else {
+        setCurrentUser(null);
+        setIsAdmin(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const checkAdminStatus = async (user: User) => {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', user.id)
+      .single();
+    
+    setIsAdmin(!!profile?.is_admin);
+  };
+
+  const login = async (email: string, password: string) => {
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+      
       navigate('/');
       toast.success('Successfully logged in');
-    } else {
-      toast.error('Invalid credentials');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to login');
     }
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    setCurrentUser(null);
-    setIsAdmin(false);
-    navigate('/login');
-    toast.success('Successfully logged out');
-  };
-
-  const createUser = (id: string, password: string) => {
-    if (!isAdmin) {
-      toast.error('Only admins can create users');
-      return;
+  const logout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      navigate('/login');
+      toast.success('Successfully logged out');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to logout');
     }
-    
-    if (users.some(u => u.id === id)) {
-      toast.error('User ID already exists');
-      return;
-    }
-
-    setUsers([...users, { id, password, isAdmin: false }]);
-    toast.success('User created successfully');
-  };
-
-  const changePassword = (userId: string, newPassword: string) => {
-    if (!isAdmin && currentUser !== userId) {
-      toast.error('You can only change your own password');
-      return;
-    }
-
-    setUsers(users.map(user => 
-      user.id === userId 
-        ? { ...user, password: newPassword }
-        : user
-    ));
-    toast.success('Password changed successfully');
   };
 
   return (
@@ -91,10 +95,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       currentUser, 
       isAdmin, 
       login, 
-      logout, 
-      createUser, 
-      changePassword,
-      users 
+      logout,
+      session
     }}>
       {children}
     </AuthContext.Provider>
