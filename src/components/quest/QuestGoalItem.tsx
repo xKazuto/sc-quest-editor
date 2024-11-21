@@ -62,6 +62,7 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, onChange, on
             className={goal.ClassName}
             count={goal.Count}
             quantity={goal.Quantity}
+            keepItem={goal.KeepItem}
             onChange={handleChange}
           />
         );
