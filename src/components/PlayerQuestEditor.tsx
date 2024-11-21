@@ -16,12 +16,14 @@ interface PlayerQuestEditorProps {
 const PlayerQuestEditor: React.FC<PlayerQuestEditorProps> = ({ initialData, onSave }) => {
   const [questData, setQuestData] = useState<PlayerQuestData>(initialData);
   const [selectedQuestId, setSelectedQuestId] = useState<string | null>(null);
+  const [currentFileName, setCurrentFileName] = useState<string>("player-quests.json");
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setCurrentFileName(file.name);
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
@@ -44,7 +46,17 @@ const PlayerQuestEditor: React.FC<PlayerQuestEditorProps> = ({ initialData, onSa
   };
 
   const handleSave = () => {
-    onSave(questData);
+    const jsonString = JSON.stringify(questData, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = currentFileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
     toast({
       title: "Changes Saved",
       description: "Your player quest data has been saved successfully.",
@@ -53,6 +65,47 @@ const PlayerQuestEditor: React.FC<PlayerQuestEditorProps> = ({ initialData, onSa
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleDeleteQuest = (questId: string) => {
+    setQuestData(prev => ({
+      ...prev,
+      Quests: prev.Quests.filter(q => q.Id !== questId),
+      CompletedQuests: prev.CompletedQuests.filter(id => id !== questId)
+    }));
+    setSelectedQuestId(null);
+    toast({
+      title: "Quest Deleted",
+      description: "The quest has been removed from your data.",
+    });
+  };
+
+  const handleUpdateGoalProgress = (goalKey: string, goalId: string, newCount: number) => {
+    setQuestData(prev => ({
+      ...prev,
+      Quests: prev.Quests.map(quest => {
+        if (quest.Id === selectedQuestId) {
+          const goals = quest.Progression[goalKey] as Record<string, QuestGoal>;
+          if (goals && goals[goalId]) {
+            const updatedGoals = {
+              ...goals,
+              [goalId]: {
+                ...goals[goalId],
+                Count: Math.min(Math.max(0, newCount), goals[goalId].MaxCount)
+              }
+            };
+            return {
+              ...quest,
+              Progression: {
+                ...quest.Progression,
+                [goalKey]: updatedGoals
+              }
+            };
+          }
+        }
+        return quest;
+      })
+    }));
   };
 
   const selectedQuest = questData.Quests.find(q => q.Id === selectedQuestId);
@@ -88,6 +141,16 @@ const PlayerQuestEditor: React.FC<PlayerQuestEditorProps> = ({ initialData, onSa
                   <span className="font-medium truncate">
                     {quest.Id}
                   </span>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteQuest(quest.Id);
+                    }}
+                  >
+                    ×
+                  </Button>
                 </div>
                 <span className="text-sm opacity-75 block truncate">
                   {quest.IsCompleted ? 'Completed' : 'In Progress'}
@@ -139,8 +202,18 @@ const PlayerQuestEditor: React.FC<PlayerQuestEditorProps> = ({ initialData, onSa
                             {Object.entries(goals as Record<string, QuestGoal>).map(([goalId, goal]) => (
                               <div key={goalId} className="p-2 bg-gray-100 rounded">
                                 <div className="font-medium">{goal.Description || goalId}</div>
-                                <div className="text-sm">
-                                  Progress: {goal.Count}/{goal.MaxCount}
+                                <div className="flex items-center gap-2">
+                                  <Input
+                                    type="number"
+                                    value={goal.Count}
+                                    min={0}
+                                    max={goal.MaxCount}
+                                    onChange={(e) => handleUpdateGoalProgress(key, goalId, parseInt(e.target.value))}
+                                    className="w-24"
+                                  />
+                                  <span className="text-sm">
+                                    / {goal.MaxCount}
+                                  </span>
                                 </div>
                               </div>
                             ))}
