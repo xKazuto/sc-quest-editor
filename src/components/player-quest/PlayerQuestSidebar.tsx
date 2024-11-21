@@ -8,6 +8,7 @@ interface PlayerQuestSidebarProps {
   onUploadClick: () => void;
   onSave: () => void;
   fileInputRef: React.RefObject<HTMLInputElement>;
+  handleFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
   quests: PlayerQuest[];
   selectedQuestId: string | null;
   onSelectQuest: (id: string) => void;
@@ -18,6 +19,7 @@ export const PlayerQuestSidebar: React.FC<PlayerQuestSidebarProps> = ({
   onUploadClick,
   onSave,
   fileInputRef,
+  handleFileUpload,
   quests,
   selectedQuestId,
   onSelectQuest,
@@ -36,6 +38,7 @@ export const PlayerQuestSidebar: React.FC<PlayerQuestSidebarProps> = ({
           type="file"
           accept=".json"
           ref={fileInputRef}
+          onChange={handleFileUpload}
           className="hidden"
         />
       </div>
