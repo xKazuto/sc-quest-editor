@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Label } from "@/components/ui/label";
+import { PlayerQuestSidebar } from './player-quest/PlayerQuestSidebar';
 
 interface PlayerQuestEditorProps {
   initialData: PlayerQuestData;
@@ -112,54 +112,15 @@ const PlayerQuestEditor: React.FC<PlayerQuestEditorProps> = ({ initialData, onSa
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <div className="w-64 border-r bg-white">
-        <div className="p-4 space-y-2 bg-[#737373]">
-          <Button onClick={handleUploadClick} variant="outline" className="w-full">
-            Load JSON File
-          </Button>
-          <Input
-            type="file"
-            accept=".json"
-            onChange={handleFileUpload}
-            ref={fileInputRef}
-            className="hidden"
-          />
-        </div>
-        <ScrollArea className="h-[calc(100vh-8rem)]">
-          <div className="space-y-2 p-4">
-            {questData.Quests.map((quest) => (
-              <div
-                key={quest.Id}
-                className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                  selectedQuestId === quest.Id
-                    ? 'bg-quest-selected text-quest-text'
-                    : 'bg-quest-background text-quest-text hover:bg-quest-hover'
-                }`}
-                onClick={() => setSelectedQuestId(quest.Id)}
-              >
-                <div className="flex justify-between items-center">
-                  <span className="font-medium truncate">
-                    {quest.Id}
-                  </span>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteQuest(quest.Id);
-                    }}
-                  >
-                    ×
-                  </Button>
-                </div>
-                <span className="text-sm opacity-75 block truncate">
-                  {quest.IsCompleted ? 'Completed' : 'In Progress'}
-                </span>
-              </div>
-            ))}
-          </div>
-        </ScrollArea>
-      </div>
+      <PlayerQuestSidebar
+        onUploadClick={handleUploadClick}
+        onSave={handleSave}
+        fileInputRef={fileInputRef}
+        quests={questData.Quests}
+        selectedQuestId={selectedQuestId}
+        onSelectQuest={setSelectedQuestId}
+        onDeleteQuest={handleDeleteQuest}
+      />
       <div className="flex-1 p-6 overflow-auto bg-[#737373]">
         <Tabs defaultValue="quest">
           <TabsList>
@@ -174,25 +135,21 @@ const PlayerQuestEditor: React.FC<PlayerQuestEditorProps> = ({ initialData, onSa
                     <h2 className="text-2xl font-bold">
                       Quest: {selectedQuest.Id}
                     </h2>
-                    <Button onClick={handleSave}>
-                      Save Changes
-                    </Button>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label>Completion Status</Label>
+                      <label className="text-sm font-medium">Completion Status</label>
                       <div className="text-lg font-medium">
                         {selectedQuest.IsCompleted ? 'Completed' : 'In Progress'}
                       </div>
                     </div>
                     <div>
-                      <Label>Quest Type</Label>
+                      <label className="text-sm font-medium">Quest Type</label>
                       <div className="text-lg font-medium">
                         {selectedQuest.Progression.QType}
                       </div>
                     </div>
                   </div>
-                  {/* Display goals based on their types */}
                   {Object.entries(selectedQuest.Progression).map(([key, goals]) => {
                     if (key.endsWith('Goals') && typeof goals === 'object' && goals !== null) {
                       return (
@@ -236,9 +193,6 @@ const PlayerQuestEditor: React.FC<PlayerQuestEditorProps> = ({ initialData, onSa
               <CardContent className="space-y-4 p-4">
                 <div className="flex justify-between mb-6">
                   <h2 className="text-2xl font-bold">Kill Records</h2>
-                  <Button onClick={handleSave}>
-                    Save Changes
-                  </Button>
                 </div>
                 <ScrollArea className="h-[600px]">
                   <div className="space-y-2">
