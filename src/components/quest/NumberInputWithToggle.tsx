@@ -7,9 +7,9 @@ import { FormItem } from "@/components/ui/form";
 interface NumberInputWithToggleProps {
   label: string;
   description: string;
-  value: number;
+  value: number | undefined;
   enabled: boolean;
-  onValueChange: (value: number) => void;
+  onValueChange: (value: number | undefined) => void;
   onToggle: (enabled: boolean) => void;
 }
 
@@ -30,7 +30,14 @@ export const NumberInputWithToggle: React.FC<NumberInputWithToggleProps> = ({
           <Switch
             id={`toggle-${label}`}
             checked={enabled}
-            onCheckedChange={onToggle}
+            onCheckedChange={(checked) => {
+              onToggle(checked);
+              if (!checked) {
+                onValueChange(undefined);
+              } else {
+                onValueChange(0);
+              }
+            }}
           />
         </div>
       </div>
@@ -38,7 +45,7 @@ export const NumberInputWithToggle: React.FC<NumberInputWithToggleProps> = ({
         <FormItem>
           <Input
             type="number"
-            value={value}
+            value={value ?? ''}
             onChange={(e) => onValueChange(Number(e.target.value))}
             placeholder={`Enter ${label}`}
             min={0}

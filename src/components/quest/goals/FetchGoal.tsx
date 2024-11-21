@@ -38,7 +38,7 @@ export const FetchGoal: React.FC<FetchGoalProps> = ({
       <NumberInputWithToggle
         label="Count"
         description="Number of items to fetch"
-        value={count ?? 0}
+        value={count}
         enabled={count !== undefined}
         onValueChange={(value) => onChange({ Count: value })}
         onToggle={(enabled) => onChange({ Count: enabled ? 0 : undefined })}
@@ -47,7 +47,7 @@ export const FetchGoal: React.FC<FetchGoalProps> = ({
       <NumberInputWithToggle
         label="Quantity"
         description="Quantity per item"
-        value={quantity ?? 0}
+        value={quantity}
         enabled={quantity !== undefined}
         onValueChange={(value) => onChange({ Quantity: value })}
         onToggle={(enabled) => onChange({ Quantity: enabled ? 0 : undefined })}
