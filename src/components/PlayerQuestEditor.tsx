@@ -116,7 +116,7 @@ const PlayerQuestEditor: React.FC<PlayerQuestEditorProps> = ({ initialData, onSa
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-background">
       <PlayerQuestSidebar
         onUploadClick={handleUploadClick}
         onSave={handleSave}
@@ -127,9 +127,9 @@ const PlayerQuestEditor: React.FC<PlayerQuestEditorProps> = ({ initialData, onSa
         onSelectQuest={setSelectedQuestId}
         onDeleteQuest={handleDeleteQuest}
       />
-      <div className="flex-1 p-6 overflow-auto bg-[#737373]">
-        <Tabs defaultValue="quest">
-          <TabsList>
+      <div className="flex-1 p-6 overflow-auto bg-background">
+        <Tabs defaultValue="quest" className="w-full">
+          <TabsList className="bg-card text-card-foreground">
             <TabsTrigger value="quest">Quest Progress</TabsTrigger>
             <TabsTrigger value="kills">Kill Records</TabsTrigger>
           </TabsList>

@@ -14,14 +14,14 @@ export const QuestProgressContent: React.FC<QuestProgressContentProps> = ({
 }) => {
   if (!selectedQuest) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-500">
+      <div className="flex items-center justify-center h-full text-muted-foreground">
         Select a quest to view its progress
       </div>
     );
   }
 
   return (
-    <Card>
+    <Card className="bg-card text-card-foreground">
       <CardContent className="space-y-4 p-4">
         <div className="flex justify-between mb-6">
           <h2 className="text-2xl font-bold">
@@ -30,13 +30,13 @@ export const QuestProgressContent: React.FC<QuestProgressContentProps> = ({
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="text-sm font-medium">Completion Status</label>
+            <label className="text-sm font-medium text-muted-foreground">Completion Status</label>
             <div className="text-lg font-medium">
               {selectedQuest.IsCompleted ? 'Completed' : 'In Progress'}
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium">Quest Type</label>
+            <label className="text-sm font-medium text-muted-foreground">Quest Type</label>
             <div className="text-lg font-medium">
               {selectedQuest.Progression.QType}
             </div>
@@ -49,7 +49,7 @@ export const QuestProgressContent: React.FC<QuestProgressContentProps> = ({
                 <h3 className="text-lg font-semibold mb-2">{key}</h3>
                 <div className="space-y-2">
                   {Object.entries(goals as Record<string, QuestGoal>).map(([goalId, goal]) => (
-                    <div key={goalId} className="p-2 bg-gray-100 rounded">
+                    <div key={goalId} className="p-2 bg-muted rounded">
                       <div className="font-medium">{goal.Description || goalId}</div>
                       <div className="flex items-center gap-2">
                         <Input
@@ -58,9 +58,9 @@ export const QuestProgressContent: React.FC<QuestProgressContentProps> = ({
                           min={0}
                           max={goal.MaxCount}
                           onChange={(e) => handleUpdateGoalProgress(key, goalId, parseInt(e.target.value))}
-                          className="w-24"
+                          className="w-24 bg-background"
                         />
-                        <span className="text-sm">
+                        <span className="text-sm text-muted-foreground">
                           / {goal.MaxCount}
                         </span>
                       </div>

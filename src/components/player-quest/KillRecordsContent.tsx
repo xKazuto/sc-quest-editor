@@ -9,7 +9,7 @@ interface KillRecordsContentProps {
 
 export const KillRecordsContent: React.FC<KillRecordsContentProps> = ({ kills }) => {
   return (
-    <Card>
+    <Card className="bg-card text-card-foreground">
       <CardContent className="space-y-4 p-4">
         <div className="flex justify-between mb-6">
           <h2 className="text-2xl font-bold">Kill Records</h2>
@@ -17,7 +17,7 @@ export const KillRecordsContent: React.FC<KillRecordsContentProps> = ({ kills })
         <ScrollArea className="h-[600px]">
           <div className="space-y-2">
             {Object.entries(kills).map(([className, record]) => (
-              <div key={className} className="p-2 bg-gray-100 rounded flex justify-between items-center">
+              <div key={className} className="p-2 bg-muted rounded flex justify-between items-center">
                 <span className="font-medium">{className}</span>
                 <span className="text-lg">{record.Count} kills</span>
               </div>

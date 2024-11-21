@@ -26,8 +26,8 @@ export const PlayerQuestSidebar: React.FC<PlayerQuestSidebarProps> = ({
   onDeleteQuest,
 }) => {
   return (
-    <div className="w-64 border-r bg-white">
-      <div className="p-4 space-y-2 bg-[#737373]">
+    <div className="w-64 border-r border-border bg-card">
+      <div className="p-4 space-y-2 bg-card">
         <Button onClick={onUploadClick} variant="outline" className="w-full">
           Load JSON File
         </Button>
@@ -49,8 +49,8 @@ export const PlayerQuestSidebar: React.FC<PlayerQuestSidebarProps> = ({
               key={quest.Id}
               className={`p-3 rounded-lg cursor-pointer transition-colors ${
                 selectedQuestId === quest.Id
-                  ? 'bg-quest-selected text-quest-text'
-                  : 'bg-quest-background text-quest-text hover:bg-quest-hover'
+                  ? 'bg-accent text-accent-foreground'
+                  : 'bg-card text-card-foreground hover:bg-accent/50'
               }`}
               onClick={() => onSelectQuest(quest.Id)}
             >
