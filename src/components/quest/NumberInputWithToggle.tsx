@@ -24,7 +24,7 @@ export const NumberInputWithToggle: React.FC<NumberInputWithToggleProps> = ({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-600 mb-1">{description}</p>
+        <Label htmlFor={`toggle-${label}`} className="text-sm">{description}</Label>
         <div className="flex items-center gap-2">
           <Label htmlFor={`toggle-${label}`} className="text-sm">Enable {label}</Label>
           <Switch
@@ -40,7 +40,8 @@ export const NumberInputWithToggle: React.FC<NumberInputWithToggleProps> = ({
             type="number"
             value={value}
             onChange={(e) => onValueChange(Number(e.target.value))}
-            placeholder={label}
+            placeholder={`Enter ${label}`}
+            min={0}
             onWheel={(e) => e.currentTarget.blur()}
           />
         </FormItem>
