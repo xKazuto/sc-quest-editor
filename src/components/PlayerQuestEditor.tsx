@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { PlayerQuestData } from '@/lib/types/progression';
+import { PlayerQuestData, QuestGoal } from '@/lib/types/progression';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
@@ -131,12 +131,12 @@ const PlayerQuestEditor: React.FC<PlayerQuestEditorProps> = ({ initialData, onSa
                   </div>
                   {/* Display goals based on their types */}
                   {Object.entries(selectedQuest.Progression).map(([key, goals]) => {
-                    if (key.endsWith('Goals') && typeof goals === 'object') {
+                    if (key.endsWith('Goals') && typeof goals === 'object' && goals !== null) {
                       return (
                         <div key={key} className="mt-4">
                           <h3 className="text-lg font-semibold mb-2">{key}</h3>
                           <div className="space-y-2">
-                            {Object.entries(goals).map(([goalId, goal]) => (
+                            {Object.entries(goals as Record<string, QuestGoal>).map(([goalId, goal]) => (
                               <div key={goalId} className="p-2 bg-gray-100 rounded">
                                 <div className="font-medium">{goal.Description || goalId}</div>
                                 <div className="text-sm">
