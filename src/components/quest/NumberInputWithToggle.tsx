@@ -22,12 +22,12 @@ export const NumberInputWithToggle: React.FC<NumberInputWithToggleProps> = ({
   onToggle,
 }) => {
   const handleToggleChange = (checked: boolean) => {
-    onToggle(checked);
     if (!checked) {
       onValueChange(undefined);
     } else if (value === undefined) {
       onValueChange(0);
     }
+    onToggle(checked);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
