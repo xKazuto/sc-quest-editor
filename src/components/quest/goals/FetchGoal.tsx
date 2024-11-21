@@ -1,7 +1,6 @@
 import React from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { NumberInputWithToggle } from '../NumberInputWithToggle';
 
 interface FetchGoalProps {
@@ -53,12 +52,15 @@ export const FetchGoal: React.FC<FetchGoalProps> = ({
         onToggle={(enabled) => onChange({ Quantity: enabled ? 0 : undefined })}
       />
 
-      <div className="flex items-center justify-between">
-        <Label htmlFor="keep-item">Keep Item After Quest</Label>
-        <Switch
-          id="keep-item"
-          checked={keepItem}
-          onCheckedChange={(checked) => onChange({ KeepItem: checked })}
+      <div>
+        <Label>Keep Item (0 or 1)</Label>
+        <Input
+          type="number"
+          min={0}
+          max={1}
+          value={keepItem ? 1 : 0}
+          onChange={(e) => onChange({ KeepItem: e.target.value === '1' })}
+          placeholder="Keep Item (0 or 1)"
         />
       </div>
     </div>
