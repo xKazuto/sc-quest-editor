@@ -22,8 +22,8 @@ export const KillGoal: React.FC<KillGoalProps> = ({ className, count, onChange }
       </div>
       <NumberInputWithToggle
         label="Count"
-        description="Count"
-        value={count ?? 0}
+        description="Number of targets to kill"
+        value={count}
         enabled={count !== undefined}
         onValueChange={(value) => onChange({ Count: value })}
         onToggle={(enabled) => onChange({ Count: enabled ? 0 : undefined })}
