@@ -21,6 +21,20 @@ export const NumberInputWithToggle: React.FC<NumberInputWithToggleProps> = ({
   onValueChange,
   onToggle,
 }) => {
+  const handleToggleChange = (checked: boolean) => {
+    onToggle(checked);
+    if (!checked) {
+      onValueChange(undefined);
+    } else if (value === undefined) {
+      onValueChange(0);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value === '' ? undefined : Number(e.target.value);
+    onValueChange(newValue);
+  };
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
@@ -30,14 +44,7 @@ export const NumberInputWithToggle: React.FC<NumberInputWithToggleProps> = ({
           <Switch
             id={`toggle-${label}`}
             checked={enabled}
-            onCheckedChange={(checked) => {
-              onToggle(checked);
-              if (!checked) {
-                onValueChange(undefined);
-              } else {
-                onValueChange(0);
-              }
-            }}
+            onCheckedChange={handleToggleChange}
           />
         </div>
       </div>
@@ -46,7 +53,7 @@ export const NumberInputWithToggle: React.FC<NumberInputWithToggleProps> = ({
           <Input
             type="number"
             value={value ?? ''}
-            onChange={(e) => onValueChange(Number(e.target.value))}
+            onChange={handleInputChange}
             placeholder={`Enter ${label}`}
             min={0}
             onWheel={(e) => e.currentTarget.blur()}
