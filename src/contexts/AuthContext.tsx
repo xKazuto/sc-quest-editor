@@ -12,10 +12,16 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const VALID_CREDENTIALS = {
-  id: 'StalkerClassic',
-  password: 'QuestMaking556'
-};
+const VALID_CREDENTIALS = [
+  {
+    id: 'StalkerClassic',
+    password: 'QuestMaking556'
+  },
+  {
+    id: 'DJ_MF',
+    password: 'Qu3stM@ker789#DJ'
+  }
+];
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<string | null>(null);
@@ -24,7 +30,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   const login = (id: string, password: string) => {
-    if (id === VALID_CREDENTIALS.id && password === VALID_CREDENTIALS.password) {
+    const validUser = VALID_CREDENTIALS.find(
+      cred => cred.id === id && cred.password === password
+    );
+
+    if (validUser) {
       setIsAuthenticated(true);
       setCurrentUser(id);
       navigate('/');
