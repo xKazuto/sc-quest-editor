@@ -18,7 +18,7 @@ const QUEST_TYPES = [
   { value: 3, label: "Exploration Quest" },
   { value: 4, label: "Fetch/Bring Quest" },
   { value: 6, label: "Player Action" },
-];
+] as const;
 
 interface QuestGoalItemProps {
   goal: Goal;
@@ -26,58 +26,42 @@ interface QuestGoalItemProps {
   onRemove: () => void;
 }
 
+const GoalTypeContent: React.FC<{ goal: Goal; onChange: (updates: Partial<Goal>) => void }> = ({ goal, onChange }) => {
+  switch (goal.QType) {
+    case 1:
+      return <TurnInGoal state={goal.State} onChange={onChange} />;
+    case 2:
+      return <KillGoal className={goal.ClassName} count={goal.Count} onChange={onChange} />;
+    case 3:
+      return (
+        <ExplorationGoal
+          triggerCoordinate={goal.TriggerCoordinate}
+          triggerRadius={goal.TriggerRadius}
+          triggerId={goal.TriggerId}
+          onChange={onChange}
+        />
+      );
+    case 4:
+      return (
+        <FetchGoal
+          className={goal.ClassName}
+          count={goal.Count}
+          quantity={goal.Quantity}
+          keepItem={goal.KeepItem}
+          onChange={onChange}
+        />
+      );
+    case 6:
+      return <PlayerActionGoal className={goal.ClassName} onChange={onChange} />;
+    default:
+      return null;
+  }
+};
+
 export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, onChange, onRemove }) => {
   const handleChange = (updates: Partial<Goal>) => {
     const updatedGoal = { ...goal, ...updates };
     onChange(cleanGoalData(updatedGoal));
-  };
-
-  const renderGoalTypeContent = () => {
-    switch (goal.QType) {
-      case 1:
-        return (
-          <TurnInGoal
-            state={goal.State}
-            onChange={handleChange}
-          />
-        );
-      case 2:
-        return (
-          <KillGoal
-            className={goal.ClassName}
-            count={goal.Count}
-            onChange={handleChange}
-          />
-        );
-      case 3:
-        return (
-          <ExplorationGoal
-            triggerCoordinate={goal.TriggerCoordinate}
-            triggerRadius={goal.TriggerRadius}
-            triggerId={goal.TriggerId}
-            onChange={handleChange}
-          />
-        );
-      case 4:
-        return (
-          <FetchGoal
-            className={goal.ClassName}
-            count={goal.Count}
-            quantity={goal.Quantity}
-            keepItem={goal.KeepItem}
-            onChange={handleChange}
-          />
-        );
-      case 6:
-        return (
-          <PlayerActionGoal
-            className={goal.ClassName}
-            onChange={handleChange}
-          />
-        );
-      default:
-        return null;
-    }
   };
 
   return (
@@ -101,7 +85,7 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, onChange, on
         </Select>
       </div>
 
-      {renderGoalTypeContent()}
+      <GoalTypeContent goal={goal} onChange={handleChange} />
 
       <div>
         <Label>Description</Label>
