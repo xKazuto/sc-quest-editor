@@ -8,13 +8,19 @@ interface PlayerActionGoalProps {
 }
 
 export const PlayerActionGoal: React.FC<PlayerActionGoalProps> = ({ className, onChange }) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    onChange({ ClassName: newValue });
+  };
+
   return (
     <div className="space-y-4">
       <div>
         <Label>Class Name</Label>
         <Input
-          value={className}
-          onChange={(e) => onChange({ ClassName: e.target.value })}
+          type="text"
+          value={className || ''}
+          onChange={handleInputChange}
           placeholder="Class Name"
         />
       </div>
