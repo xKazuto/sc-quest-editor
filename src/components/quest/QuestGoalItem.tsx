@@ -9,6 +9,7 @@ import { TurnInGoal } from './goals/TurnInGoal';
 import { KillGoal } from './goals/KillGoal';
 import { ExplorationGoal } from './goals/ExplorationGoal';
 import { FetchGoal } from './goals/FetchGoal';
+import { PlayerActionGoal } from './goals/PlayerActionGoal';
 import { cleanGoalData } from '@/lib/questGoalUtils';
 
 const QUEST_TYPES = [
@@ -16,6 +17,7 @@ const QUEST_TYPES = [
   { value: 2, label: "Kill Quest" },
   { value: 3, label: "Exploration Quest" },
   { value: 4, label: "Fetch/Bring Quest" },
+  { value: 6, label: "Player Action" },
 ];
 
 interface QuestGoalItemProps {
@@ -63,6 +65,13 @@ export const QuestGoalItem: React.FC<QuestGoalItemProps> = ({ goal, onChange, on
             count={goal.Count}
             quantity={goal.Quantity}
             keepItem={goal.KeepItem}
+            onChange={handleChange}
+          />
+        );
+      case 6:
+        return (
+          <PlayerActionGoal
+            className={goal.ClassName}
             onChange={handleChange}
           />
         );
