@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 interface PlayerActionGoalProps {
-  className: string;
+  className?: string;
   onChange: (updates: Partial<{ ClassName: string }>) => void;
 }
 
@@ -16,7 +16,7 @@ export const PlayerActionGoal: React.FC<PlayerActionGoalProps> = ({ className, o
     <div className="space-y-2">
       <Label>Action Required</Label>
       <Input
-        value={className || ''}
+        value={className ?? ''}
         onChange={handleInputChange}
         placeholder="Enter required action"
       />
