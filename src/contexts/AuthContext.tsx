@@ -20,6 +20,10 @@ const VALID_CREDENTIALS = [
   {
     id: 'DJ_MF',
     password: 'Qu3stM@ker789#DJ'
+  },
+  {
+    id: 'SSURV',
+    password: 'Q!u@e#s$tM%a^k&er*'
   }
 ];
 
