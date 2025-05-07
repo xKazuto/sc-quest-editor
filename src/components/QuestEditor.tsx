@@ -1,13 +1,10 @@
-import React, { useState, useRef } from 'react';
-import { Quest, QuestData, QuestGiver } from '@/lib/types';
+
+import React from 'react';
+import { QuestData } from '@/lib/types';
 import QuestList from './QuestList';
-import QuestForm from './QuestForm';
-import QuestGiverEditor from './QuestGiverEditor';
-import { createEmptyQuest } from '@/lib/questValidation';
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useQuestEditor } from './quest-editor/useQuestEditor';
+import QuestEditorToolbar from './quest-editor/QuestEditorToolbar';
+import QuestEditorTabs from './quest-editor/QuestEditorTabs';
 
 interface QuestEditorProps {
   initialData: QuestData;
@@ -15,121 +12,26 @@ interface QuestEditorProps {
 }
 
 const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
-  const [questData, setQuestData] = useState<QuestData>(initialData);
-  const [selectedQuestId, setSelectedQuestId] = useState<string | null>(null);
-  const { toast } = useToast();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleAddQuest = () => {
-    const newQuest = createEmptyQuest();
-    setQuestData(prev => ({
-      ...prev,
-      Quests: [...prev.Quests, newQuest]
-    }));
-    setSelectedQuestId(newQuest.Id);
-    toast({
-      title: "New Quest Added",
-      description: "Start editing your new quest!",
-    });
-  };
-
-  const handleRemoveQuest = (questId: string) => {
-    setQuestData(prev => ({
-      ...prev,
-      Quests: prev.Quests.filter(q => q.Id !== questId)
-    }));
-    if (selectedQuestId === questId) {
-      setSelectedQuestId(null);
-    }
-    toast({
-      title: "Quest Removed",
-      description: "The quest has been deleted.",
-      variant: "destructive",
-    });
-  };
-
-  const handleQuestChange = (updatedQuest: Quest) => {
-    setQuestData(prev => ({
-      ...prev,
-      Quests: prev.Quests.map(q => {
-        if (q.Id === selectedQuestId) {
-          // If the ID is being updated, update the selectedQuestId as well
-          if (updatedQuest.Id !== q.Id) {
-            setSelectedQuestId(updatedQuest.Id);
-          }
-          return updatedQuest;
-        }
-        return q;
-      })
-    }));
-  };
-
-  const handleSave = () => {
-    onSave(questData);
-    toast({
-      title: "Changes Saved",
-      description: "Your quest data has been saved successfully.",
-    });
-  };
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const json = JSON.parse(e.target?.result as string);
-          setQuestData(json);
-          toast({
-            title: "File Loaded",
-            description: "Quest data has been loaded successfully.",
-          });
-        } catch (error) {
-          toast({
-            title: "Error",
-            description: "Failed to parse JSON file.",
-            variant: "destructive",
-          });
-        }
-      };
-      reader.readAsText(file);
-    }
-  };
-
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleQuestGiversUpdate = (newQuestGivers: QuestGiver[]) => {
-    setQuestData(prev => ({
-      ...prev,
-      QuestGivers: newQuestGivers
-    }));
-  };
-
-  const selectedQuest = questData.Quests.find(q => q.Id === selectedQuestId);
+  const {
+    questData,
+    selectedQuest,
+    selectedQuestId,
+    handleAddQuest,
+    handleRemoveQuest,
+    handleQuestChange,
+    handleSave,
+    handleFileUpload,
+    handleQuestGiversUpdate,
+    setSelectedQuestId
+  } = useQuestEditor(initialData, onSave);
 
   return (
     <div className="flex h-screen bg-gray-100">
       <div className="w-64 border-r bg-white">
-        <div className="p-4 space-y-2 bg-[#737373]">
-          <Button 
-            onClick={handleAddQuest} 
-            className="w-full bg-quest-background text-quest-text hover:bg-quest-hover"
-          >
-            Add New Quest
-          </Button>
-          <Button onClick={handleUploadClick} variant="outline" className="w-full">
-            Load JSON File
-          </Button>
-          <Input
-            type="file"
-            accept=".json"
-            onChange={handleFileUpload}
-            ref={fileInputRef}
-            className="hidden"
-          />
-        </div>
+        <QuestEditorToolbar
+          onAddQuest={handleAddQuest}
+          onFileUpload={handleFileUpload}
+        />
         <QuestList
           quests={questData.Quests}
           selectedQuestId={selectedQuestId}
@@ -138,52 +40,15 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
         />
       </div>
       <div className="flex-1 p-6 overflow-auto bg-[#737373]">
-        <Tabs defaultValue="quests">
-          <TabsList>
-            <TabsTrigger value="quests">Quests</TabsTrigger>
-            <TabsTrigger value="questgivers">Quest Givers</TabsTrigger>
-          </TabsList>
-          <TabsContent value="quests">
-            {selectedQuest ? (
-              <>
-                <div className="flex justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-black">
-                    Editing Quest: {selectedQuest.Name || 'Unnamed Quest'}
-                  </h2>
-                  <Button 
-                    onClick={handleSave}
-                    className="bg-quest-background text-quest-text hover:bg-quest-hover"
-                  >
-                    Save Changes
-                  </Button>
-                </div>
-                <QuestForm
-                  quest={selectedQuest}
-                  onChange={handleQuestChange}
-                />
-              </>
-            ) : (
-              <div className="flex items-center justify-center h-full text-gray-500">
-                Select a quest to edit or create a new one
-              </div>
-            )}
-          </TabsContent>
-          <TabsContent value="questgivers">
-            <div className="space-y-4">
-              <div className="flex justify-between mb-6">
-                <h2 className="text-2xl font-bold">Quest Givers</h2>
-                <Button onClick={handleSave}>
-                  Save Changes
-                </Button>
-              </div>
-              <QuestGiverEditor
-                questGivers={questData.QuestGivers}
-                onUpdate={handleQuestGiversUpdate}
-                availableQuestIds={questData.Quests.map(q => q.Id)}
-              />
-            </div>
-          </TabsContent>
-        </Tabs>
+        <QuestEditorTabs
+          selectedQuest={selectedQuest}
+          selectedQuestId={selectedQuestId}
+          questData={questData}
+          onQuestChange={handleQuestChange}
+          onQuestGiversUpdate={handleQuestGiversUpdate}
+          onSave={handleSave}
+          onDeleteQuest={handleRemoveQuest}
+        />
       </div>
     </div>
   );

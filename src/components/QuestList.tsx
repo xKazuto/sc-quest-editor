@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { Quest } from '@/lib/types';
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { X } from "lucide-react";
 
 interface QuestListProps {
   quests: Quest[];
@@ -34,14 +36,16 @@ const QuestList: React.FC<QuestListProps> = ({
                 {quest.Name || 'Unnamed Quest'}
               </span>
               <Button
-                variant="destructive"
-                size="sm"
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
                 onClick={(e) => {
                   e.stopPropagation();
                   onRemoveQuest(quest.Id);
                 }}
+                type="button"
               >
-                ×
+                <X className="h-4 w-4" />
               </Button>
             </div>
             <span className="text-sm opacity-75 block truncate">

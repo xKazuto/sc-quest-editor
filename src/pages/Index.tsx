@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import QuestEditor from '@/components/QuestEditor';
 import PlayerQuestEditor from '@/components/PlayerQuestEditor';
@@ -21,9 +22,27 @@ const Index = () => {
     ActionQuests: {}
   };
 
+  // Helper function to fix missing fields in quests
+  const fixQuestData = (data: QuestData): QuestData => {
+    return {
+      ...data,
+      Quests: data.Quests.map(quest => ({
+        ...quest,
+        // Add missing Blacklist property if it doesn't exist
+        Blacklist: quest.Blacklist || [],
+        // Force-cast components to ensure they're properly rendered
+        Name: quest.Name || '',
+        Description: quest.Description || '',
+        Id: quest.Id || ''
+      }))
+    };
+  };
+
   const handleQuestSave = (data: QuestData) => {
     console.log('Saving quest data:', data);
-    const jsonString = JSON.stringify(data, null, 2);
+    // Apply fix before saving to ensure consistent data structure
+    const fixedData = fixQuestData(data);
+    const jsonString = JSON.stringify(fixedData, null, 2);
     
     const blob = new Blob([jsonString], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
