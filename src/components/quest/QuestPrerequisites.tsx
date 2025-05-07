@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Quest } from '@/lib/types';
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface QuestPrerequisitesProps {
   quest: Quest;
@@ -10,7 +11,12 @@ interface QuestPrerequisitesProps {
 
 export const QuestPrerequisites: React.FC<QuestPrerequisitesProps> = ({ quest, onChange }) => {
   // Store the raw input as a string in component state
-  const [rawInput, setRawInput] = React.useState<string>(quest.PreQuests.join(', '));
+  const [rawInput, setRawInput] = React.useState<string>('');
+  
+  // Update the internal state whenever quest changes
+  useEffect(() => {
+    setRawInput(quest.PreQuests?.join(', ') || '');
+  }, [quest.Id, quest.PreQuests]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Store the raw input value
@@ -29,7 +35,7 @@ export const QuestPrerequisites: React.FC<QuestPrerequisitesProps> = ({ quest, o
 
   return (
     <div>
-      <label className="text-sm font-medium">Pre-Quests (comma-separated IDs)</label>
+      <Label className="text-sm font-medium">Pre-Quests (comma-separated IDs)</Label>
       <Input
         value={rawInput}
         onChange={handleInputChange}

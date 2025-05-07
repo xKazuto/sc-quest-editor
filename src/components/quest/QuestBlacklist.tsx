@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Quest } from '@/lib/types';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +11,12 @@ interface QuestBlacklistProps {
 
 export const QuestBlacklist: React.FC<QuestBlacklistProps> = ({ quest, onChange }) => {
   // Store the raw input as a string in component state
-  const [rawInput, setRawInput] = React.useState<string>(quest.Blacklist.join(', '));
+  const [rawInput, setRawInput] = React.useState<string>('');
+  
+  // Update the internal state whenever quest changes
+  useEffect(() => {
+    setRawInput(quest.Blacklist?.join(', ') || '');
+  }, [quest.Id, quest.Blacklist]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Store the raw input value
