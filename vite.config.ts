@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -11,6 +12,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
+    // The componentTagger function doesn't accept arguments in the current version
     mode === 'development' && componentTagger(),
   ].filter(Boolean),
   resolve: {

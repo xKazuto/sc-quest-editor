@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Quest } from '@/lib/types';
 import { Input } from "@/components/ui/input";
@@ -8,8 +9,21 @@ interface QuestPrerequisitesProps {
 }
 
 export const QuestPrerequisites: React.FC<QuestPrerequisitesProps> = ({ quest, onChange }) => {
-  const handlePreQuestsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const preQuests = e.target.value.split(',').map(id => id.trim()).filter(id => id);
+  // Store the raw input as a string in component state
+  const [rawInput, setRawInput] = React.useState<string>(quest.PreQuests.join(', '));
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Store the raw input value
+    const inputValue = e.target.value;
+    setRawInput(inputValue);
+    
+    // Only process the split operation when updating the quest data
+    // This allows users to freely type commas
+    const preQuests = inputValue
+      .split(',')
+      .map(id => id.trim())
+      .filter(id => id);
+      
     onChange({ PreQuests: preQuests });
   };
 
@@ -17,8 +31,8 @@ export const QuestPrerequisites: React.FC<QuestPrerequisitesProps> = ({ quest, o
     <div>
       <label className="text-sm font-medium">Pre-Quests (comma-separated IDs)</label>
       <Input
-        value={quest.PreQuests.join(', ')}
-        onChange={handlePreQuestsChange}
+        value={rawInput}
+        onChange={handleInputChange}
         placeholder="quest1, quest2, quest3"
         className="mt-1"
       />

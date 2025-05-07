@@ -2,6 +2,7 @@ import React from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NumberInputWithToggle } from '../NumberInputWithToggle';
+import { Switch } from "@/components/ui/switch";
 
 interface FetchGoalProps {
   className: string;
@@ -23,6 +24,12 @@ export const FetchGoal: React.FC<FetchGoalProps> = ({
   keepItem = false,
   onChange,
 }) => {
+  // Handler for the keepItem switch
+  const handleKeepItemChange = (value: boolean) => {
+    console.log('Switch clicked, new value:', value);
+    onChange({ KeepItem: value });
+  };
+
   return (
     <div className="space-y-4">
       <div>
@@ -52,16 +59,13 @@ export const FetchGoal: React.FC<FetchGoalProps> = ({
         onToggle={(enabled) => onChange({ Quantity: enabled ? 0 : undefined })}
       />
 
-      <div>
-        <Label>Keep Item (0 or 1)</Label>
-        <Input
-          type="number"
-          min={0}
-          max={1}
-          value={keepItem ? 1 : 0}
-          onChange={(e) => onChange({ KeepItem: e.target.value === '1' })}
-          placeholder="Keep Item (0 or 1)"
+      <div className="flex items-center space-x-2">
+        <Switch
+          id="keep-item-switch"
+          checked={keepItem}
+          onCheckedChange={handleKeepItemChange}
         />
+        <Label htmlFor="keep-item-switch" className="cursor-pointer">Keep Item</Label>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+
 import { Goal } from '@/lib/types';
 
 const createDefaultGoal = (): Omit<Goal, 'QType' | 'Description'> => ({
@@ -58,13 +59,14 @@ export const cleanGoalData = (goal: Goal): Goal => {
       const fetchGoal = {
         ...baseGoal,
         ClassName: goal.ClassName,
+        KeepItem: goal.KeepItem, 
       };
-      if (goal.Count !== undefined) {
-        Object.assign(fetchGoal, { Count: goal.Count });
-      }
-      if (goal.Quantity !== undefined) {
-        Object.assign(fetchGoal, { Quantity: goal.Quantity });
-      }
+      
+      // Explicitly preserve Count and Quantity, even if undefined
+      // This ensures the toggle state is maintained correctly
+      fetchGoal.Count = goal.Count;
+      fetchGoal.Quantity = goal.Quantity;
+      
       return fetchGoal;
 
     default:
