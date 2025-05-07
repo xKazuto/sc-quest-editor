@@ -1,3 +1,4 @@
+
 export interface Quest {
   Id: string;
   TakerId: string;
@@ -7,6 +8,7 @@ export interface Quest {
   Goals: Goal[];
   Rewards: Reward[];
   PreQuests: string[];
+  Blacklist: string[]; // New property for blacklisting tasks
   IsRepeatable: boolean;
   RepeatDurationHours: number;
   RepeatDurationMinutes: number;

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Quest } from '@/lib/types';
 import { Checkbox } from "@/components/ui/checkbox";
@@ -5,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { QuestBasicFields } from './QuestBasicFields';
 import { QuestPrerequisites } from './QuestPrerequisites';
+import { QuestBlacklist } from './QuestBlacklist';
 import { QuestSoundSettings } from './QuestSoundSettings';
 import { FormItem } from "@/components/ui/form";
 
@@ -22,6 +24,7 @@ export const QuestBasicInfo: React.FC<QuestBasicInfoProps> = ({ quest, onChange 
     <div className="space-y-6">
       <QuestBasicFields quest={quest} onChange={onChange} />
       <QuestPrerequisites quest={quest} onChange={onChange} />
+      <QuestBlacklist quest={quest} onChange={onChange} />
 
       <FormItem className="flex items-center space-x-2">
         <Checkbox

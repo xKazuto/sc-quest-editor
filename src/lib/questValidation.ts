@@ -19,6 +19,7 @@ export const createEmptyQuest = (): Quest => ({
   Goals: [],
   Rewards: [],
   PreQuests: [],
+  Blacklist: [], // Initialize with empty array
   IsRepeatable: false,
   RepeatDurationHours: 0,
   RepeatDurationMinutes: 0,
