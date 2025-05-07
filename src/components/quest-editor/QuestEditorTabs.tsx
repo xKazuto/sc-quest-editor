@@ -34,12 +34,12 @@ const QuestEditorTabs: React.FC<QuestEditorTabsProps> = ({
   };
 
   return (
-    <Tabs defaultValue="quests">
-      <TabsList>
+    <Tabs defaultValue="quests" className="h-full flex flex-col">
+      <TabsList className="bg-card/50 backdrop-blur-sm mx-auto">
         <TabsTrigger value="quests">Quests</TabsTrigger>
         <TabsTrigger value="questgivers">Quest Givers</TabsTrigger>
       </TabsList>
-      <TabsContent value="quests">
+      <TabsContent value="quests" className="flex-1 overflow-auto">
         {selectedQuest ? (
           <>
             <QuestEditorHeader
@@ -48,30 +48,34 @@ const QuestEditorTabs: React.FC<QuestEditorTabsProps> = ({
               onSave={onSave}
               onDeleteCurrentQuest={handleDeleteCurrentQuest}
             />
-            <QuestForm
-              quest={selectedQuest}
-              onChange={onQuestChange}
-            />
+            <div className="glass-panel p-6">
+              <QuestForm
+                quest={selectedQuest}
+                onChange={onQuestChange}
+              />
+            </div>
           </>
         ) : (
-          <div className="flex items-center justify-center h-full text-gray-500">
+          <div className="flex items-center justify-center h-full text-muted-foreground">
             Select a quest to edit or create a new one
           </div>
         )}
       </TabsContent>
-      <TabsContent value="questgivers">
+      <TabsContent value="questgivers" className="flex-1 overflow-auto">
         <div className="space-y-4">
           <div className="flex justify-between mb-6">
             <h2 className="text-2xl font-bold">Quest Givers</h2>
-            <Button onClick={onSave}>
+            <Button onClick={onSave} className="bg-primary text-primary-foreground hover:bg-primary/90">
               Save Changes
             </Button>
           </div>
-          <QuestGiverEditor
-            questGivers={questData.QuestGivers}
-            onUpdate={onQuestGiversUpdate}
-            availableQuestIds={questData.Quests.map(q => q.Id)}
-          />
+          <div className="glass-panel p-6">
+            <QuestGiverEditor
+              questGivers={questData.QuestGivers}
+              onUpdate={onQuestGiversUpdate}
+              availableQuestIds={questData.Quests.map(q => q.Id)}
+            />
+          </div>
         </div>
       </TabsContent>
     </Tabs>

@@ -1,10 +1,10 @@
+
 import React from 'react';
 import { Quest } from '@/lib/types';
 import { QuestBasicInfo } from './quest/QuestBasicInfo';
 import { QuestDescription } from './quest/QuestDescription';
 import { QuestGoals } from './quest/QuestGoals';
 import { QuestRewards } from './quest/QuestRewards';
-import { Card, CardContent } from "@/components/ui/card";
 
 interface QuestFormProps {
   quest: Quest;
@@ -17,23 +17,29 @@ const QuestForm: React.FC<QuestFormProps> = ({ quest, onChange }) => {
   };
 
   return (
-    <Card>
-      <CardContent className="space-y-6 p-6">
+    <div className="space-y-8">
+      <div className="space-y-6">
         <QuestBasicInfo quest={quest} onChange={updateQuest} />
         <QuestDescription 
           description={quest.Description ?? ''} 
           onChange={(description) => updateQuest({ Description: description })} 
         />
+      </div>
+      
+      <div className="p-4 bg-card/40 rounded-lg border border-border/30 space-y-6">
         <QuestGoals 
           goals={quest.Goals} 
           onChange={(goals) => updateQuest({ Goals: goals })} 
         />
+      </div>
+      
+      <div className="p-4 bg-card/40 rounded-lg border border-border/30">
         <QuestRewards 
           rewards={quest.Rewards} 
           onChange={(rewards) => updateQuest({ Rewards: rewards })} 
         />
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

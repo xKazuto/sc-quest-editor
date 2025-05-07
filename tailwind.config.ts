@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -25,18 +26,18 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         quest: {
-          primary: "#6E59A5",
-          secondary: "#7E69AB",
-          accent: "#D6BCFA",
-          background: "#1A1F2C",
-          text: "#F1F0FB",
-          hover: "#2C3344",
-          selected: "#403E43",
+          primary: "hsl(var(--quest-primary))",
+          secondary: "hsl(var(--quest-secondary))",
+          accent: "hsl(var(--quest-accent))",
+          background: "hsl(var(--quest-background))",
+          text: "hsl(var(--quest-text))",
+          hover: "hsl(var(--quest-hover))",
+          selected: "hsl(var(--quest-selected))",
           input: {
-            background: "#2C3344",
-            text: "#F1F0FB",
-            placeholder: "#9F9EA1",
-            border: "#403E43",
+            background: "hsl(var(--quest-input-background))",
+            text: "hsl(var(--quest-input-text))",
+            placeholder: "hsl(var(--quest-input-placeholder))",
+            border: "hsl(var(--quest-input-border))",
           },
         },
         primary: {
@@ -82,10 +83,20 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" }
+        },
+        "scale-in": {
+          "0%": { opacity: "0", transform: "scale(0.95)" },
+          "100%": { opacity: "1", transform: "scale(1)" }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 0.3s ease-out",
+        "scale-in": "scale-in 0.2s ease-out",
       },
     },
   },

@@ -26,8 +26,8 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
   } = useQuestEditor(initialData, onSave);
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <div className="w-64 border-r bg-white">
+    <div className="flex h-[calc(100vh-12rem)] quest-card">
+      <div className="quest-sidebar">
         <QuestEditorToolbar
           onAddQuest={handleAddQuest}
           onFileUpload={handleFileUpload}
@@ -39,7 +39,7 @@ const QuestEditor: React.FC<QuestEditorProps> = ({ initialData, onSave }) => {
           onRemoveQuest={handleRemoveQuest}
         />
       </div>
-      <div className="flex-1 p-6 overflow-auto bg-[#737373]">
+      <div className="quest-content bg-background/40">
         <QuestEditorTabs
           selectedQuest={selectedQuest}
           selectedQuestId={selectedQuestId}

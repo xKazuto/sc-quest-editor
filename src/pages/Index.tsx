@@ -1,12 +1,13 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import QuestEditor from '@/components/QuestEditor';
 import PlayerQuestEditor from '@/components/PlayerQuestEditor';
 import { QuestData } from '@/lib/types';
 import { PlayerQuestData } from '@/lib/types/progression';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LogOut } from "lucide-react";
 
 const Index = () => {
   const { logout } = useAuth();
@@ -71,15 +72,20 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#6b6b6b' }}>
+    <div className="min-h-screen bg-background">
       <div className="p-4 flex justify-end">
-        <Button variant="outline" onClick={logout}>
+        <Button 
+          variant="outline" 
+          onClick={logout}
+          className="flex items-center gap-2 hover:bg-card"
+        >
+          <LogOut className="h-4 w-4" />
           Logout
         </Button>
       </div>
       <div className="container mx-auto p-4">
         <Tabs defaultValue="quest-editor" className="space-y-4">
-          <TabsList className="w-full">
+          <TabsList className="w-full bg-card/60 backdrop-blur-sm">
             <TabsTrigger value="quest-editor" className="flex-1">Quest Editor</TabsTrigger>
             <TabsTrigger value="player-quest-editor" className="flex-1">Player Quest Editor</TabsTrigger>
           </TabsList>

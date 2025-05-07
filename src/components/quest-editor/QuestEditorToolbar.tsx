@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { PlusCircle, Upload } from "lucide-react";
 
 interface QuestEditorToolbarProps {
   onAddQuest: () => void;
@@ -18,14 +19,20 @@ const QuestEditorToolbar: React.FC<QuestEditorToolbarProps> = ({ onAddQuest, onF
   };
 
   return (
-    <div className="p-4 space-y-2 bg-[#737373]">
+    <div className="quest-header space-y-2">
       <Button 
         onClick={onAddQuest} 
-        className="w-full bg-quest-background text-quest-text hover:bg-quest-hover"
+        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2"
       >
+        <PlusCircle className="h-4 w-4" />
         Add New Quest
       </Button>
-      <Button onClick={handleUploadClick} variant="outline" className="w-full">
+      <Button 
+        onClick={handleUploadClick} 
+        variant="outline" 
+        className="w-full flex items-center gap-2"
+      >
+        <Upload className="h-4 w-4" />
         Load JSON File
       </Button>
       <Input
